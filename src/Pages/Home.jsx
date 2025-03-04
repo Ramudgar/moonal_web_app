@@ -175,15 +175,17 @@ const Home = () => {
         {/* Featured Products Section */}
         <section className="py-20 bg-[#F2F2F2]">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-[#002147] mb-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-extrabold text-[#002147] mb-4 relative inline-block">
                 Featured Products
+                <span className="absolute left-1/2 transform -translate-x-1/2 bottom-[-8px] w-16 h-[4px] bg-[#FF4500] rounded-full"></span>
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Discover our range of high-quality lubricants designed for
-                optimal performance and protection
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+                Explore our premium range of high-quality lubricants, crafted
+                for optimal performance and superior protection.
               </p>
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featuredProducts.map((product) => (
                 <motion.div
@@ -230,7 +232,6 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Why Choose Us Section */}
         {/* Why Choose Us Section */}
         <section className="py-20 bg-white">
           <div className="container mx-auto px-4">
@@ -439,7 +440,8 @@ const Home = () => {
               Ready to Become a Dealer?
             </h2>
             <p className="text-lg mb-8 max-w-2xl mx-auto text-gray-300">
-              Join our network of dealers and grow your business with premium oil products from Moonal Udhyog.
+              Join our network of dealers and grow your business with premium
+              oil products from Moonal Udhyog.
             </p>
 
             <Link

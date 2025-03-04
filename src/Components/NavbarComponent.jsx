@@ -97,7 +97,7 @@ export default function NavbarComponent() {
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Link
-                  to={`/${item.toLowerCase().replace(" ", "-")}`}
+                  to={item=="Home"?'/':`/${item.toLowerCase().replace(" ", "-")}`}
                   className="text-[#002147] hover:text-[#FF4500] transition"
                 >
                   {item}
