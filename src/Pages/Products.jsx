@@ -110,14 +110,13 @@ const ProductsPage = () => {
     <MainLayout>
       <div className="pt-20 min-h-screen bg-gray-50">
         {/* Page Header */}
-        {/* Page Header */}
-        <div className="relative py-20 md:py-24 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
+        <div className="relative  py-20 md:py-24 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
           {/* Overlay Content */}
-          <div className="relative z-10 px-6 max-w-4xl mx-auto">
+          <div className="relative  z-10 px-4 max-w-5xl  mx-auto">
             {/* Heading with Responsive Font Size */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-wide drop-shadow-lg leading-tight">
-              Premium <span className="text-[#FF4500]">Engine Oils</span> for
-              <br className="hidden sm:block" /> Ultimate Performance
+            <h1 className="text-3xl sm:text-4xl md:text-5xl  font-extrabold tracking-wide drop-shadow-lg leading-tight ">
+              Premium <span className="text-[#FF4500]">Engine Oils</span> for Ultimate Performance
+              <br className="hidden sm:block text-2xl" /> 
             </h1>
 
             {/* Subtitle with Adjusted Line Height */}
