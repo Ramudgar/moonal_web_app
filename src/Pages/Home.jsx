@@ -14,6 +14,7 @@ import {
   MapPin,
 } from "lucide-react";
 import MainLayout from "../Layouts/MainLayout";
+import moonalBanner from "../assets/images/moonalBanner.jpeg";
 
 const Home = () => {
   // Testimonial slider settings
@@ -121,7 +122,7 @@ const Home = () => {
         <section className="relative h-screen flex items-center justify-center bg-[#002147] text-white">
           <div className="absolute inset-0 overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80"
+              src={moonalBanner}
               alt="Lubricants"
               className="w-full h-full object-cover opacity-20"
             />
