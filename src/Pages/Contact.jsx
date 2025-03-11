@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import MainLayout from "../Layouts/MainLayout";
-import { useLocation } from "react-router-dom";
+import { Link as BrowserLink, useLocation } from "react-router-dom";
 import { Link } from "react-scroll";
 
 const ContactPage = () => {
@@ -71,13 +71,14 @@ const ContactPage = () => {
           {/* Call-to-Action Buttons */}
           <div className="relative z-10 flex justify-center mt-6 space-x-4">
             {/* Call Us Now Button */}
-            <motion.a
-              href="tel:+9771234567890"
-              className="inline-block bg-[#FF4500] hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition transform hover:scale-105"
-              whileHover={{ scale: 1.1 }}
-            >
-              📞 Call Us Now
-            </motion.a>
+            <motion.div whileHover={{ scale: 1.1 }}>
+              <BrowserLink
+                to="tel:+9771234567890"
+                className="inline-block bg-[#FF4500] text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition transform hover:scale-105 cursor-pointer"
+              >
+                📞 Call Us Now
+              </BrowserLink>
+            </motion.div>
 
             {/* Send a Message Button */}
             <motion.div whileHover={{ scale: 1.1 }}>
@@ -247,13 +248,14 @@ const ContactPage = () => {
               superior engine performance.
             </p>
 
-            <motion.a
-              href="/products"
-              className="inline-block bg-[#FF4500] hover:bg-red-600 text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105 shadow-lg"
-              whileHover={{ scale: 1.1 }}
-            >
-              View Products
-            </motion.a>
+            <motion.div className="inline-block" whileHover={{ scale: 1.05 }}>
+              <BrowserLink
+                to="/products"
+                className="inline-block bg-[#FF4500] text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition transform hover:scale-105 cursor-pointer"
+              >
+                View Products
+              </BrowserLink>
+            </motion.div>
           </div>
         </section>
       </div>
