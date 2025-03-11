@@ -410,7 +410,7 @@ const Home = () => {
                       <span className="font-medium">{event.location}</span>
                     </div>
                     <Link
-                      to="/events-gallery"
+                      to="/event"
                       className="inline-flex items-center bg-[#FF4500] hover:bg-[#E63E00] text-white font-semibold py-2 px-6 rounded-full transition-colors shadow-md"
                     >
                       Learn More <ChevronRight className="h-5 w-5 ml-2" />
@@ -422,7 +422,7 @@ const Home = () => {
 
             <div className="text-center mt-12">
               <Link
-                to="/events-gallery"
+                to="/event"
                 className="inline-flex items-center bg-[#FF4500] hover:bg-[#E63E00] text-white font-semibold py-4 px-10 rounded-lg transition-colors text-lg shadow-md"
               >
                 View All Events <ChevronRight className="h-5 w-5 ml-1" />

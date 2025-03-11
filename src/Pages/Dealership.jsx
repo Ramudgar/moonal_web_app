@@ -10,7 +10,8 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
-
+import {Link} from "react-router-dom";
+import MainLayout from "../Layouts/MainLayout";
 const DealershipPage = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState(null);
@@ -71,6 +72,7 @@ const DealershipPage = () => {
   };
 
   return (
+    <MainLayout>
     <div className="pt-20 min-h-screen bg-gray-50">
       {/* 🚀 Page Header */}
       <div className="relative py-24 md:py-32 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
@@ -203,30 +205,37 @@ const DealershipPage = () => {
 
             {submitSuccess ? (
               <motion.div
-                className="bg-green-50 border border-green-200 rounded-lg p-8 text-center shadow-md"
+                className="bg-[#002147] border border-[#FF4500] rounded-lg p-8 text-center shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
                 {/* 🎉 Success Icon */}
                 <div className="flex justify-center">
-                  <CheckCircle className="h-14 w-14 text-green-500" />
+                  <CheckCircle className="h-16 w-16 text-[#FF4500]" />
                 </div>
 
                 {/* ✅ Success Message */}
-                <h3 className="text-2xl font-bold text-green-800 mt-4">
+                <h3 className="text-3xl font-bold text-white mt-4">
                   🎉 Application Submitted Successfully!
                 </h3>
-                <p className="text-green-700 mt-2 text-lg">
-                  Thank you for your interest in becoming a **Moonal Udhyog**
+                <p className="text-gray-300 mt-2 text-lg">
+                  Thank you for your interest in becoming a{" "}
+                  <span className="font-semibold text-[#FF4500]">
+                    Moonal Udhyog
+                  </span>{" "}
                   dealer. Our team will review your application and contact you
-                  within **5-7 business days**.
+                  within{" "}
+                  <span className="font-semibold text-[#FF4500]">
+                    5-7 business days
+                  </span>
+                  .
                 </p>
 
                 {/* 📧 Contact Information */}
-                <p className="text-green-700 mt-4">
+                <p className="text-gray-300 mt-4">
                   If you have any questions, feel free to reach out:
-                  <span className="font-semibold block mt-1">
+                  <span className="font-semibold block mt-1 text-[#FF4500]">
                     📩 dealership@moonaludhyog.com
                   </span>
                 </p>
@@ -401,7 +410,7 @@ const DealershipPage = () => {
                       </label>
                       <select
                         id="businessType"
-                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none ${
+                        className={`w-full  px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none ${
                           errors.businessType
                             ? "border-red-500"
                             : "border-gray-300"
@@ -411,7 +420,10 @@ const DealershipPage = () => {
                         })}
                       >
                         <option value="">Select Business Type</option>
-                        <option value="Sole Proprietorship">
+                        <option
+                          value="Sole Proprietorship"
+                          className="hover:nth-[]:"
+                        >
                           Sole Proprietorship
                         </option>
                         <option value="Partnership">Partnership</option>
@@ -619,7 +631,7 @@ const DealershipPage = () => {
                       <input
                         id="terms"
                         type="checkbox"
-                        className={`h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-red-500 ${
+                        className={`h-4 w-4 text-red-600 accent-[#FF4500]  border-gray-300 rounded focus:ring-red-500 ${
                           errors.terms ? "border-red-500" : ""
                         }`}
                         {...register("terms", {
@@ -647,7 +659,7 @@ const DealershipPage = () => {
                 <div className="text-center">
                   <button
                     type="submit"
-                    className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+                    className="inline-flex items-center bg-[#FF4500] hover:bg-red-00 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
                   >
                     Submit Application <Send className="h-5 w-5 ml-2" />
                   </button>
@@ -659,52 +671,60 @@ const DealershipPage = () => {
       </section>
 
       {/* FAQs Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-[#F9FAFB]">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-800 mb-12 text-center">
+          {/* Heading */}
+          <h2 className="text-4xl font-bold text-[#002147] mb-12 text-center">
             Frequently Asked Questions
           </h2>
 
+          {/* FAQs Accordion */}
           <div className="max-w-3xl mx-auto">
             {faqs.map((faq, index) => (
-              <div key={index} className="mb-4">
+              <div key={index} className="mb-5">
+                {/* FAQ Question Button */}
                 <button
-                  className="flex justify-between items-center w-full p-5 bg-gray-50 hover:bg-gray-100 rounded-lg text-left focus:outline-none"
+                  className="flex justify-between items-center w-full p-5 bg-white hover:bg-[#FF4500]/10 border border-gray-300 rounded-lg text-left focus:outline-none shadow-sm transition"
                   onClick={() => toggleAccordion(index)}
                 >
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-[#002147] text-lg">
                     {faq.question}
                   </span>
                   <ChevronDown
-                    className={`h-5 w-5 text-gray-500 transition-transform ${
+                    className={`h-6 w-6 text-[#FF4500] transition-transform ${
                       activeAccordion === index ? "transform rotate-180" : ""
                     }`}
                   />
                 </button>
 
+                {/* FAQ Answer */}
                 {activeAccordion === index && (
-                  <div className="p-5 bg-white border border-gray-200 rounded-b-lg mt-1">
-                    <p className="text-gray-600">{faq.answer}</p>
+                  <div className="p-5 bg-white border-l-4 border-[#FF4500] rounded-b-lg mt-2 shadow-md">
+                    <p className="text-gray-700 leading-relaxed">
+                      {faq.answer}
+                    </p>
                   </div>
                 )}
               </div>
             ))}
           </div>
 
+          {/* Contact Info */}
           <div className="text-center mt-12">
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-700 text-lg font-medium mb-4">
               Still have questions about becoming a dealer?
+              <Link
+                to="/contact#contact-form"
+                className="  text-[#FF4500]   font-light"
+              >
+               &nbsp; Contact Our Dealership Team
+              </Link>
             </p>
-            <a
-              href="mailto:dealership@moonaludhyog.com"
-              className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium"
-            >
-              Contact our dealership team at dealership@moonaludhyog.com
-            </a>
           </div>
         </div>
       </section>
     </div>
+    </MainLayout>
   );
 };
 
