@@ -12,6 +12,9 @@ import {
 import { useState } from "react";
 import {Link} from "react-router-dom";
 import MainLayout from "../Layouts/MainLayout";
+
+
+import {Link as ScrollLink} from "react-scroll";  
 const DealershipPage = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState(null);
@@ -73,7 +76,7 @@ const DealershipPage = () => {
 
   return (
     <MainLayout>
-    <div className="pt-20 min-h-screen bg-gray-50">
+    <div className=" min-h-screen bg-gray-50">
       {/* 🚀 Page Header */}
       <div className="relative py-24 md:py-32 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
         {/* Animated Overlay Content */}
@@ -109,12 +112,14 @@ const DealershipPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
           >
-            <a
-              href="#dealership-form"
+            <ScrollLink
+              to="dealership-form"
+              smooth={true}
+              duration={800}
               className="bg-[#FF4500] text-white px-6 py-3 rounded-lg text-sm sm:text-lg font-semibold shadow-md hover:bg-red-600 transition transform hover:scale-105"
             >
               Apply for Dealership
-            </a>
+            </ScrollLink>
             <a
               href="/contact"
               className="border-2 border-[#FF4500] text-[#FF4500] px-6 py-3 rounded-lg text-sm sm:text-lg font-semibold shadow-md hover:bg-[#FF4500] hover:text-white transition transform hover:scale-105"

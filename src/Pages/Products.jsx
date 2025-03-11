@@ -108,7 +108,7 @@ const ProductsPage = () => {
 
   return (
     <MainLayout>
-      <div className="pt-20 min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50">
         {/* Page Header */}
         <div className="relative  py-20 md:py-24 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
           {/* Overlay Content */}

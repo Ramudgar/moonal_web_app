@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, ExternalLink } from "lucide-react";
 import MainLayout from "../Layouts/MainLayout";
+import { useLocation } from "react-router-dom";
 
 const EventsGalleryPage = () => {
   const [activeTab, setActiveTab] = useState("upcoming");
+  const location = useLocation();
 
   // Sample events data
   const upcomingEvents = [
@@ -143,169 +145,192 @@ const EventsGalleryPage = () => {
     },
   ];
 
-  return (
-    <MainLayout>
-    <div className="pt-20 min-h-screen bg-gray-50">
-      {/* Page Header */}
-      {/* Page Header */}
-<div className="relative py-24 md:py-32 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
-  {/* Header Content */}
-  <div className="container mx-auto px-4">
-    <h1 className="text-5xl font-extrabold mb-4 text-[#FF4500] drop-shadow-lg">
-      Events & Gallery
-    </h1>
-    <p className="text-xl max-w-2xl mx-auto text-gray-200 drop-shadow-md">
-      Stay updated with our latest events and browse through our gallery of past activities.
-    </p>
-  </div>
-</div>
-
-
-      {/* Tab Navigation */}
-  {/* Tab Navigation */}
-<div className="container mx-auto px-4 py-8">
-  <div className="flex justify-center border-b border-gray-300 mb-8">
-    {[
+  const eventGalleryTab = useMemo(
+    () => [
       { id: "upcoming", label: "Upcoming Events" },
       { id: "past", label: "Past Events" },
       { id: "gallery", label: "Gallery" },
-    ].map((tab) => (
-      <button
-        key={tab.id}
-        className={`py-3 px-6 font-medium text-lg tracking-wide transition-colors duration-300 border-b-2 ${
-          activeTab === tab.id
-            ? "text-[#FF4500] border-[#FF4500] font-semibold"
-            : "text-gray-500 hover:text-[#FF4500] border-transparent"
-        }`}
-        onClick={() => setActiveTab(tab.id)}
-      >
-        {tab.label}
-      </button>
-    ))}
-  </div>
+    ],
+    []
+  );
 
-  {/* Upcoming Events */}
-  {activeTab === "upcoming" && (
-    <div>
-      <h2 className="text-3xl font-bold text-[#002147] mb-8 text-center">
-        🔥 Upcoming Events
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {upcomingEvents.map((event) => (
-          <motion.div
-            key={event.id}
-            className="bg-white rounded-lg shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-2 border border-gray-200"
-            whileHover={{ y: -5 }}
-          >
-            <div className="h-60 overflow-hidden group">
-              <img
-                src={event.image}
-                alt={event.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="p-6 text-center">
-              <h3 className="text-2xl font-semibold text-[#002147] mb-2">
-                {event.title}
-              </h3>
-              <div className="flex justify-center items-center text-gray-600 mb-2 gap-2">
-                <Calendar className="h-5 w-5 text-[#FF4500]" />
-                <span className="font-medium">{event.date}</span>
-              </div>
-              <div className="flex justify-center items-center text-gray-600 mb-4 gap-2">
-                <MapPin className="h-5 w-5 text-[#FF4500]" />
-                <span className="font-medium">{event.location}</span>
-              </div>
-              <p className="text-gray-600 mb-4 text-sm">{event.description}</p>
-              <a
-                href="#"
-                className="inline-flex items-center text-[#FF4500] font-medium hover:underline"
+  // ✅ Detect URL hash on load and update active tab
+  useEffect(() => {
+    const hash = location.hash.replace("#", ""); // Remove #
+    if (eventGalleryTab.some((eventtab) => eventtab.id === hash)) {
+      setActiveTab(hash);
+    }
+  }, [location, eventGalleryTab]);
+
+  // ✨ Function to update URL hash without reloading
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+    window.history.pushState(null, "", `#${tabId}`);
+  };
+
+  return (
+    <MainLayout>
+      <div className=" min-h-screen bg-gray-50">
+        {/* Page Header */}
+        <div className="relative py-24 md:py-32 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
+          {/* Header Content */}
+          <div className="container mx-auto px-4">
+            <h1 className="text-5xl font-extrabold mb-4 text-[#FF4500] drop-shadow-lg">
+              Events & Gallery
+            </h1>
+            <p className="text-xl max-w-2xl mx-auto text-gray-200 drop-shadow-md">
+              Stay updated with our latest events and browse through our gallery
+              of past activities.
+            </p>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex justify-center border-b border-gray-300 mb-8">
+            {eventGalleryTab.map((tab) => (
+              <button
+                key={tab.id}
+                className={`py-3 px-6 font-medium text-lg tracking-wide transition-colors duration-300 border-b-2 ${
+                  activeTab === tab.id
+                    ? "text-[#FF4500] border-[#FF4500] font-semibold"
+                    : "text-gray-500 hover:text-[#FF4500] border-transparent"
+                }`}
+                onClick={() => handleTabClick(tab.id)}
               >
-                Learn More <ExternalLink className="h-4 w-4 ml-1" />
-              </a>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  )}
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-  {/* Past Events */}
-  {activeTab === "past" && (
-    <div>
-      <h2 className="text-3xl font-bold text-[#002147] mb-8 text-center">
-        🎉 Past Events
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {pastEvents.map((event) => (
-          <motion.div
-            key={event.id}
-            className="bg-white rounded-lg shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-2 border border-gray-200"
-            whileHover={{ y: -5 }}
-          >
-            <div className="h-60 overflow-hidden group">
-              <img
-                src={event.image}
-                alt={event.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div className="p-6 text-center">
-              <h3 className="text-2xl font-semibold text-[#002147] mb-2">
-                {event.title}
-              </h3>
-              <div className="flex justify-center items-center text-gray-600 mb-2 gap-2">
-                <Calendar className="h-5 w-5 text-[#FF4500]" />
-                <span className="font-medium">{event.date}</span>
+          {/* Upcoming Events */}
+          {activeTab === "upcoming" && (
+            <div>
+              <h2 className="text-3xl font-bold text-[#002147] mb-8 text-center">
+                🔥 Upcoming Events
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {upcomingEvents.map((event) => (
+                  <motion.div
+                    key={event.id}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-2 border border-gray-200"
+                    whileHover={{ y: -5 }}
+                  >
+                    <div className="h-60 overflow-hidden group">
+                      <img
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-6 text-center">
+                      <h3 className="text-2xl font-semibold text-[#002147] mb-2">
+                        {event.title}
+                      </h3>
+                      <div className="flex justify-center items-center text-gray-600 mb-2 gap-2">
+                        <Calendar className="h-5 w-5 text-[#FF4500]" />
+                        <span className="font-medium">{event.date}</span>
+                      </div>
+                      <div className="flex justify-center items-center text-gray-600 mb-4 gap-2">
+                        <MapPin className="h-5 w-5 text-[#FF4500]" />
+                        <span className="font-medium">{event.location}</span>
+                      </div>
+                      <p className="text-gray-600 mb-4 text-sm">
+                        {event.description}
+                      </p>
+                      <a
+                        href="#"
+                        className="inline-flex items-center text-[#FF4500] font-medium hover:underline"
+                      >
+                        Learn More <ExternalLink className="h-4 w-4 ml-1" />
+                      </a>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-              <div className="flex justify-center items-center text-gray-600 mb-4 gap-2">
-                <MapPin className="h-5 w-5 text-[#FF4500]" />
-                <span className="font-medium">{event.location}</span>
+            </div>
+          )}
+
+          {/* Past Events */}
+          {activeTab === "past" && (
+            <div>
+              <h2 className="text-3xl font-bold text-[#002147] mb-8 text-center">
+                🎉 Past Events
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {pastEvents.map((event) => (
+                  <motion.div
+                    key={event.id}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-2 border border-gray-200"
+                    whileHover={{ y: -5 }}
+                  >
+                    <div className="h-60 overflow-hidden group">
+                      <img
+                        src={event.image}
+                        alt={event.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-6 text-center">
+                      <h3 className="text-2xl font-semibold text-[#002147] mb-2">
+                        {event.title}
+                      </h3>
+                      <div className="flex justify-center items-center text-gray-600 mb-2 gap-2">
+                        <Calendar className="h-5 w-5 text-[#FF4500]" />
+                        <span className="font-medium">{event.date}</span>
+                      </div>
+                      <div className="flex justify-center items-center text-gray-600 mb-4 gap-2">
+                        <MapPin className="h-5 w-5 text-[#FF4500]" />
+                        <span className="font-medium">{event.location}</span>
+                      </div>
+                      <p className="text-gray-600 mb-4 text-sm">
+                        {event.description}
+                      </p>
+                      <a
+                        href="#"
+                        className="inline-flex items-center text-[#FF4500] font-medium hover:underline"
+                      >
+                        View Event Photos{" "}
+                        <ExternalLink className="h-4 w-4 ml-1" />
+                      </a>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
-              <p className="text-gray-600 mb-4 text-sm">{event.description}</p>
-              <a
-                href="#"
-                className="inline-flex items-center text-[#FF4500] font-medium hover:underline"
-              >
-                View Event Photos <ExternalLink className="h-4 w-4 ml-1" />
-              </a>
             </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  )}
+          )}
 
-  {/* Gallery */}
-  {activeTab === "gallery" && (
-    <div>
-      <h2 className="text-3xl font-bold text-[#002147] mb-8 text-center">
-        📸 Event Gallery
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {galleryImages.map((image) => (
-          <motion.div
-            key={image.id}
-            className="relative overflow-hidden rounded-lg shadow-md group transition-all hover:shadow-xl"
-            whileHover={{ scale: 1.03 }}
-          >
-            <img
-              src={image.image}
-              alt={image.title}
-              className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-              <h3 className="text-white font-semibold text-lg">{image.title}</h3>
-              <p className="text-white/80 text-sm">{image.event}</p>
+          {/* Gallery */}
+          {activeTab === "gallery" && (
+            <div>
+              <h2 className="text-3xl font-bold text-[#002147] mb-8 text-center">
+                📸 Event Gallery
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {galleryImages.map((image) => (
+                  <motion.div
+                    key={image.id}
+                    className="relative overflow-hidden rounded-lg shadow-md group transition-all hover:shadow-xl"
+                    whileHover={{ scale: 1.03 }}
+                  >
+                    <img
+                      src={image.image}
+                      alt={image.title}
+                      className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                      <h3 className="text-white font-semibold text-lg">
+                        {image.title}
+                      </h3>
+                      <p className="text-white/80 text-sm">{image.event}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </motion.div>
-        ))}
+          )}
+        </div>
       </div>
-    </div>
-  )}
-</div>
-
-    </div>
     </MainLayout>
   );
 };

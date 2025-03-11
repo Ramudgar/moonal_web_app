@@ -63,7 +63,7 @@ export default function NavbarComponent() {
 
           {/* 🟢 Navigation Links */}
           <ul className="hidden lg:flex space-x-6 text-lg font-medium">
-            {["Home", "About", "Products", "Dealership", "Contact", "Event"].map(
+            {["Home", "About", "Products", "Dealership", "Contact", "Event","Policy"].map(
               (item, index) => {
                 const itemPath = item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "-")}`;
                 const isActive = location.pathname === itemPath; // Check if active
@@ -121,7 +121,7 @@ export default function NavbarComponent() {
               className="lg:hidden bg-[#002147] text-white text-lg font-medium text-center overflow-hidden"
             >
               <ul className="space-y-3 py-4">
-                {["Home", "About", "Products", "Dealership", "Contact", "Event"].map(
+                {["Home", "About", "Products", "Dealership", "Contact", "Event","Policy"].map(
                   (item, index) => {
                     const itemPath = item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "-")}`;
                     const isActive = location.pathname === itemPath;

@@ -4,6 +4,7 @@ import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import MainLayout from "../Layouts/MainLayout";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-scroll";
 
 const ContactPage = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -34,7 +35,7 @@ const ContactPage = () => {
   }, [location]);
   return (
     <MainLayout>
-      <div className="pt-20 min-h-screen bg-gray-50">
+      <div className=" min-h-screen bg-gray-50">
         {/* 🚀 Page Header */}
         <div className="relative bg-[#002147] text-white py-20 text-center overflow-hidden">
           {/* Background Animation (Optional) */}
@@ -69,6 +70,7 @@ const ContactPage = () => {
 
           {/* Call-to-Action Buttons */}
           <div className="relative z-10 flex justify-center mt-6 space-x-4">
+            {/* Call Us Now Button */}
             <motion.a
               href="tel:+9771234567890"
               className="inline-block bg-[#FF4500] hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition transform hover:scale-105"
@@ -77,13 +79,17 @@ const ContactPage = () => {
               📞 Call Us Now
             </motion.a>
 
-            <motion.a
-              href="#contact-form"
-              className="inline-block border-2 border-[#FF4500] text-[#FF4500] hover:bg-[#FF4500] hover:text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition transform hover:scale-105"
-              whileHover={{ scale: 1.1 }}
-            >
-              ✉️ Send a Message
-            </motion.a>
+            {/* Send a Message Button */}
+            <motion.div whileHover={{ scale: 1.1 }}>
+              <Link
+                to="contact-form"
+                smooth={true}
+                duration={500}
+                className="inline-block border-2 border-[#FF4500] text-[#FF4500] hover:bg-[#FF4500] hover:text-white font-semibold py-3 px-6 rounded-lg text-lg shadow-md transition transform hover:scale-105 cursor-pointer"
+              >
+                ✉️ Send a Message
+              </Link>
+            </motion.div>
           </div>
         </div>
 

@@ -90,7 +90,7 @@ const AboutUs = () => {
   return (
     <MainLayout>
       {/* page header or hero section */}
-      <div className="pt-20 min-h-screen bg-gray-50">
+      <div className=" min-h-screen bg-gray-50">
         <div className="relative py-20 md:py-24 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
           <motion.div
             className="relative z-10 px-6 max-w-5xl mx-auto"

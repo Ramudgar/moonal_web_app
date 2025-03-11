@@ -33,7 +33,7 @@ const EventDetails = () => {
 
   return (
     <MainLayout>
-    <div className="pt-20 min-h-screen bg-gray-50">
+    <div className=" min-h-screen bg-gray-50">
       {/* 🔥 Event Header */}
       <div className="relative py-24 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
         <motion.div
