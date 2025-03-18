@@ -4,10 +4,12 @@ import 'remixicon/fonts/remixicon.css'
 
 import './index.css'
 
-import App from './App.jsx'
+// import App from './App.jsx'
+import AdminLayout from './Pages/Admin/AdminLayout.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    {/* <App /> */}
+    <AdminLayout />
   </StrictMode>,
 )

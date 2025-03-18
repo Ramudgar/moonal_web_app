@@ -98,7 +98,7 @@ const AboutUs = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="container mx-auto px-6 lg:px-12 relative text-center">
+            <div className="container mx-auto md:px-6 px-1 lg:px-12 relative text-center">
               {/* Company Name & Intro */}
               <h2 className="text-5xl font-bold text-white drop-shadow-lg">
                 Welcome to{" "}

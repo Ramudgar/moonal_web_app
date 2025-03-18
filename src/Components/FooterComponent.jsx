@@ -46,15 +46,15 @@ const FooterComponent = () => {
             engine oils and lubricants. We are committed to providing the best
             products to our customers.
           </p>
-          <div className="mt-4 bg-white rounded-full flex items-center px-4 py-2 w-88">
+          <div className="mt-4 bg-white rounded-full flex items-center px-4 py-2 w-auto  md:px-4 md:py-2 md:w-88">
             <input
               type="text"
-              className="text-black border-0 outline-0 focus:ring-0"
+              className="text-black border-0 outline-0 focus:ring-0 w-full"
               placeholder="enter your email"
             />
             <motion.button
               whileHover={{ scale: 1.025 }}
-              className="bg-gray-800 text-white px-6 py-2 rounded-full me-2 hover:bg-red-600  cursor-pointer "
+              className="bg-gray-800 text-white py-1 px-2 md:px-6 md:py-2 rounded-full md:me-2  hover:bg-red-600  cursor-pointer "
             >
               Subscribe
             </motion.button>
