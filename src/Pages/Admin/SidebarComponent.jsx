@@ -9,19 +9,35 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const menuItems = [
     { name: "Dashboard", icon: "ri-dashboard-fill", path: "/admin/dashboard" },
     { name: "Contact List", icon: "ri-contacts-fill", path: "/admin/contacts" },
-    { name: "Dealership Requests", icon: "ri-handshake-fill", path: "/admin/dealership" },
+    {
+      name: "Dealership Requests",
+      icon: "ri-user-follow-fill",
+      path: "/admin/dealership",
+    },
     { name: "Gallery", icon: "ri-gallery-fill", path: "/admin/gallery" },
     { name: "Events", icon: "ri-calendar-event-fill", path: "/admin/events" },
     { name: "Team Handling", icon: "ri-group-fill", path: "/admin/team" },
     { name: "Products", icon: "ri-box-3-fill", path: "/admin/products" },
-    { name: "Testimonials", icon: "ri-chat-quote-fill", path: "/admin/testimonials" },
-    { name: "Subscribers", icon: "ri-mail-send-fill", path: "/admin/subscribers" },
+    {
+      name: "Testimonials",
+      icon: "ri-chat-quote-fill",
+      path: "/admin/testimonials",
+    },
+    {
+      name: "Subscribers",
+      icon: "ri-mail-send-fill",
+      path: "/admin/subscribers",
+    },
+    {
+      name: "Settings",
+      icon: "ri-settings-3-fill",
+    },
   ];
 
   return (
-    <motion.div 
-      initial={{ x: -250 }} 
-      animate={{ x: isOpen ? 0 : -250 }} 
+    <motion.div
+      initial={{ x: -250 }}
+      animate={{ x: isOpen ? 0 : -250 }}
       transition={{ duration: 0.3 }}
       className={`fixed left-0 top-0 h-full w-64 bg-[#001F3F] text-white shadow-lg flex flex-col z-50`}
     >
@@ -37,7 +53,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             key={index}
             to={item.path}
             className={`flex items-center px-6 py-3 transition ${
-              location.pathname === item.path ? "bg-[#FF4500] text-white" : "hover:bg-[#FF4500]"
+              location.pathname === item.path
+                ? "bg-[#FF4500] text-white"
+                : "hover:bg-[#FF4500]"
             }`}
           >
             <i className={`${item.icon} text-xl mr-3`}></i>

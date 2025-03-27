@@ -10,6 +10,7 @@ import EventDetails from "./Pages/EventDetailsPage";
 import AboutUs from "./Pages/About";
 import PolicyPages from "./Pages/PolicyPages";
 import ReviewsPage from "./Pages/ReviewPage";
+import GalleryDetails from "./Pages/GalleryDetailsPage";
 function App() {
   return (
     <Router>
@@ -21,9 +22,10 @@ function App() {
         <Route path="/dealership" element={<DealershipPage />} />
         <Route path="/event" element={<EventsGalleryPage />} />
         <Route path="event/:id" element={<EventDetails />} />
+        <Route path="/gallery/:eventId" element={<GalleryDetails />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/policy" element={<PolicyPages />} />
-        <Route path="/reviews" element={<ReviewsPage/>} />
+        <Route path="/reviews" element={<ReviewsPage />} />
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </Router>

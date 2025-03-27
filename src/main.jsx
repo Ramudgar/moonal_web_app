@@ -4,8 +4,8 @@ import 'remixicon/fonts/remixicon.css'
 
 import './index.css'
 
-// import App from './App.jsx'
 import AdminLayout from './Pages/Admin/AdminLayout.jsx'
+// import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
