@@ -163,7 +163,7 @@ const AdminTestimonialManagement = () => {
             {currentTestimonials.map((testimonial) => (
               <tr
                 key={testimonial.id}
-                className="border-b hover:bg-gray-50 transition"
+                className="border-b border-gray-200 hover:bg-gray-50 transition"
               >
                 <td className="px-4 py-3 font-medium">{testimonial.name}</td>
                 <td className="px-4 py-3 text-sm text-gray-500">

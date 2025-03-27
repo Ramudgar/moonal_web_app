@@ -11,6 +11,7 @@ import EventManagement from "./AdminEventPage";
 import TeamManagement from "./AdminTeamManagement";
 import AdminTestimonialManagement from "./AdminTestimonialManagement";
 import AdminSubscriberManagement from "./AdminSubscriberManagement";
+import AdminProductManagement from "./AdminProductPage";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -45,9 +46,7 @@ const AdminLayout = () => {
                 path="/admin/subscribers"
                 element={<AdminSubscriberManagement />}
               />
-              {/*<Route path="/admin/products" element={<Products />} />
-             
-             */}
+              <Route path="/admin/products" element={<AdminProductManagement />} />
             </Routes>
           </main>
         </div>

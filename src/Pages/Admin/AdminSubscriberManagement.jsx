@@ -11,7 +11,6 @@ const AdminSubscriberManagement = () => {
   const [viewingSubscriber, setViewingSubscriber] = useState(null);
   const [selectedIds, setSelectedIds] = useState([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleteMode, setDeleteMode] = useState("multiple"); // or 'single'
 
   const [subscribers, setSubscribers] = useState([
     {
@@ -100,7 +99,6 @@ const AdminSubscriberManagement = () => {
       alert("Please select subscribers to delete.");
       return;
     }
-    setDeleteMode("multiple");
     setShowDeleteConfirm(true);
   };
 
@@ -145,7 +143,7 @@ const AdminSubscriberManagement = () => {
           </select>
           <button
             onClick={handleExportCSV}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
           >
             <i className="ri-download-line mr-1"></i> Export CSV
           </button>
@@ -188,7 +186,7 @@ const AdminSubscriberManagement = () => {
               currentSubscribers.map((sub) => (
                 <tr
                   key={sub.id}
-                  className="border-b hover:bg-gray-50 transition"
+                  className="border-b border-gray-200 hover:bg-gray-50 transition"
                 >
                   <td className="px-4 py-3 font-medium">{sub.email}</td>
                   <td className="px-4 py-3 text-sm text-gray-600">
