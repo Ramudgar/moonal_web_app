@@ -14,6 +14,8 @@ const delearshipRoute = require("./routes/delearshipRoute");
 const reviewRoute = require("./routes/reviewRoute");
 const eventRoute = require("./routes/eventRoute");
 const galleryRoute = require("./routes/galleryRoute");
+const categoryRoute = require("./routes/categoryRoute");
+const productRoute = require("./routes/productRoute");
 
 // import the connectDB function from the db.js file
 const connectDB = require("./configs/db");
@@ -42,6 +44,9 @@ app.use("/api/v1/delearship", delearshipRoute);
 app.use("/api/v1/reviews", reviewRoute);
 app.use("/api/v1/events", eventRoute);
 app.use("/api/v1/gallery", galleryRoute);
+app.use("/api/v1/categories", categoryRoute);
+app.use("/api/v1/products", productRoute);
+
 
 import("chalk").then((chalk) => {
   app.listen(PORT, () => {

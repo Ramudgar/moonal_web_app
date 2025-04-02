@@ -72,6 +72,8 @@ const createEventWithGallery = async (req, res) => {
       }
     }
 
+  
+
     // 3. Save gallery (if images exist)
     let savedGallery = null;
     if (images.length > 0) {

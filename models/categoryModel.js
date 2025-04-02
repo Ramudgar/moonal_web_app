@@ -5,10 +5,6 @@ const categorySchema = new mongoose.Schema({
     type: String,
     required: [true, "Name is required"],
   },
-  description: {
-    type: String,
-    required: [true, "Description is required"],
-  },
 
   createdAt: {
     type: Date,
