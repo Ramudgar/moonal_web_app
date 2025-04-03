@@ -16,6 +16,7 @@ const eventRoute = require("./routes/eventRoute");
 const galleryRoute = require("./routes/galleryRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
+const teamRoute = require("./routes/teamRoute");
 
 // import the connectDB function from the db.js file
 const connectDB = require("./configs/db");
@@ -46,6 +47,7 @@ app.use("/api/v1/events", eventRoute);
 app.use("/api/v1/gallery", galleryRoute);
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/products", productRoute);
+app.use("/api/v1/team", teamRoute);
 
 
 import("chalk").then((chalk) => {
