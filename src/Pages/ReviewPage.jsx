@@ -215,7 +215,7 @@ const ReviewPage = () => {
               {/* Comment Field */}
               <div className="mb-4">
                 <label className="block text-gray-700 font-medium">
-                  Your Feedback *
+                  Your Review *
                 </label>
                 <textarea
                   rows={4}

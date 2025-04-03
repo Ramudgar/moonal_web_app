@@ -31,6 +31,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     {
       name: "Settings",
       icon: "ri-settings-3-fill",
+      path: "/admin/settings",
     },
   ];
 

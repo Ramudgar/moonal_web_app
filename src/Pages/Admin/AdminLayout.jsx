@@ -12,6 +12,7 @@ import TeamManagement from "./AdminTeamManagement";
 import AdminTestimonialManagement from "./AdminTestimonialManagement";
 import AdminSubscriberManagement from "./AdminSubscriberManagement";
 import AdminProductManagement from "./AdminProductPage";
+import AdminSettings from "./settingsComponent";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -46,7 +47,12 @@ const AdminLayout = () => {
                 path="/admin/subscribers"
                 element={<AdminSubscriberManagement />}
               />
-              <Route path="/admin/products" element={<AdminProductManagement />} />
+              <Route
+                path="/admin/products"
+                element={<AdminProductManagement />}
+              />
+              <Route path="/admin/settings" element={<AdminSettings />} />
+              <Route path="*" element={<h1>404 Not Found</h1>} />
             </Routes>
           </main>
         </div>
