@@ -11,9 +11,11 @@ import AboutUs from "./Pages/About";
 import PolicyPages from "./Pages/PolicyPages";
 import ReviewsPage from "./Pages/ReviewPage";
 import GalleryDetails from "./Pages/GalleryDetailsPage";
+import { ToastContainer } from "react-toastify";
 function App() {
   return (
-    <Router>
+    <>
+        <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<ProductsPage />} />
@@ -29,6 +31,9 @@ function App() {
         <Route path="*" element={<h1>404 Not Found</h1>} />
       </Routes>
     </Router>
+    <ToastContainer position="top-right" theme="colored" />
+    </>
+
   );
 }
 

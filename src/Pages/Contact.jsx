@@ -1,13 +1,24 @@
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  submitContactForm,
+  resetContactState,
+} from "../features/contact/contactSlice";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import MainLayout from "../Layouts/MainLayout";
 import { Link as BrowserLink, useLocation } from "react-router-dom";
 import { Link } from "react-scroll";
 
 const ContactPage = () => {
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const dispatch = useDispatch();
+
+  const { loading, successMessage, error } = useSelector(
+    (state) => state.contact
+  );
+
   const {
     register,
     handleSubmit,
@@ -16,13 +27,9 @@ const ContactPage = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-    setSubmitSuccess(true);
-    reset();
-    setTimeout(() => {
-      setSubmitSuccess(false);
-    }, 5000);
+    dispatch(submitContactForm(data));
   };
+
   const location = useLocation();
 
   useEffect(() => {
@@ -33,6 +40,19 @@ const ContactPage = () => {
       }
     }
   }, [location]);
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      reset();
+      dispatch(resetContactState());
+    }
+
+    if (error) {
+      toast.error(error);
+      dispatch(resetContactState());
+    }
+  }, [successMessage, error, dispatch, reset]);
+
   return (
     <MainLayout>
       <div className=" min-h-screen bg-gray-50">
@@ -144,78 +164,70 @@ const ContactPage = () => {
               <h2 className="text-2xl font-bold text-gray-800 mb-6">
                 Send Us a Message
               </h2>
-
-              {submitSuccess ? (
-                <motion.div
-                  className="bg-green-100 border border-green-300 rounded-lg p-6 text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-green-800">
-                    Message Sent Successfully!
-                  </h3>
-                  <p className="text-green-700">
-                    Thank you for contacting us. We’ll get back to you soon.
-                  </p>
-                </motion.div>
-              ) : (
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  className="bg-white rounded-lg p-8 shadow-md"
-                >
-                  {["name", "email", "phone", "subject"].map((field, index) => (
-                    <div key={index} className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
-                        {field} *
-                      </label>
-                      <input
-                        type={field === "email" ? "email" : "text"}
-                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#FF4500] focus:outline-none ${
-                          errors[field] ? "border-red-500" : "border-gray-300"
-                        }`}
-                        {...register(field, {
-                          required: `${field} is required`,
-                        })}
-                      />
-                      {errors[field] && (
-                        <p className="mt-1 text-sm text-red-600">
-                          {errors[field].message}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-
-                  {/* Message Box */}
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Message *
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="bg-white rounded-lg p-8 shadow-md"
+              >
+                {["name", "email", "phone", "subject"].map((field, index) => (
+                  <div key={index} className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">
+                      {field} *
                     </label>
-                    <textarea
-                      rows={5}
+                    <input
+                      type={
+                        field === "email"
+                          ? "email"
+                          : field === "phone"
+                          ? "tel"
+                          : "text"
+                      }
                       className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#FF4500] focus:outline-none ${
-                        errors.message ? "border-red-500" : "border-gray-300"
+                        errors[field] ? "border-red-500" : "border-gray-300"
                       }`}
-                      placeholder="How can we help you?"
-                      {...register("message", {
-                        required: "Message is required",
+                      {...register(field, {
+                        required: `${field} is required`,
                       })}
-                    ></textarea>
-                    {errors.message && (
+                    />
+                    {errors[field] && (
                       <p className="mt-1 text-sm text-red-600">
-                        {errors.message.message}
+                        {errors[field].message}
                       </p>
                     )}
                   </div>
+                ))}
 
-                  <button
-                    type="submit"
-                    className="inline-flex items-center bg-[#FF4500] hover:bg-red-600 text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
-                  >
-                    Send Message <Send className="h-5 w-5 ml-2" />
-                  </button>
-                </form>
-              )}
+                {/* Message Box */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Message *
+                  </label>
+                  <textarea
+                    rows={5}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#FF4500] focus:outline-none ${
+                      errors.message ? "border-red-500" : "border-gray-300"
+                    }`}
+                    placeholder="How can we help you?"
+                    {...register("message", {
+                      required: "Message is required",
+                    })}
+                  ></textarea>
+                  {errors.message && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.message.message}
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  disabled={loading}
+                  type="submit"
+                  className="inline-flex items-center bg-[#FF4500] hover:bg-red-600 text-white font-semibold py-3 px-8 rounded-lg transition transform hover:scale-105"
+                >
+                  {loading ? "Sending..." : "Send Message"}{" "}
+                  <Send className="h-5 w-5 ml-2" />
+                </button>
+              </form>
+              {/* )} */}
             </div>
 
             {/* 🌍 Map */}

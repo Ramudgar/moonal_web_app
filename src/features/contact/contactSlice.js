@@ -1,15 +1,20 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../Utils/Api'; // Use your existing Api.js
+// features/contact/contactSlice.js
 
-// Async API call
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '../../Utils/Api';
+import { API_ENDPOINTS } from '../../Utils/Constant';
+
 export const submitContactForm = createAsyncThunk(
   'contact/submitContactForm',
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/contact', formData);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      const res = await api.post(API_ENDPOINTS.CONTACT.CREATE, formData);
+      return {
+        ...res.data, // includes contact
+        message: 'Thank you! Your message has been received 👏', // your custom message
+      };
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
     }
   }
 );
@@ -36,11 +41,11 @@ const contactSlice = createSlice({
       })
       .addCase(submitContactForm.fulfilled, (state, action) => {
         state.loading = false;
-        state.successMessage = action.payload.message || 'Form submitted!';
+        state.successMessage = action.payload.message || 'Submitted!';
       })
       .addCase(submitContactForm.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Failed to submit.';
+        state.error = action.payload || 'Something went wrong.';
       });
   },
 });
