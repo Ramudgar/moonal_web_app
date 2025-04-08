@@ -14,7 +14,8 @@ export default function NavbarComponent() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="hidden lg:flex justify-around items-center bg-[#001F3F] text-white text-sm py-2 shadow-md"
+        className="hidden lg:flex justify-around items-center bg-[#001F3F] text-white text-sm py-2 shadow-md "
+      
       >
         {/* Left Contact Info */}
         <div className="flex items-center space-x-6">
@@ -47,7 +48,7 @@ export default function NavbarComponent() {
       </motion.div>
 
       {/* 🔹 Sticky Navbar */}
-      <nav className="sticky top-0 bg-white shadow-lg z-50">
+      <nav className="sticky top-0 bg-white shadow-lg z-50 ">
         <div className="container mx-auto flex justify-between items-center py-3 px-4">
           {/* 🔵 Logo */}
           <Link to="/" className="flex items-center">

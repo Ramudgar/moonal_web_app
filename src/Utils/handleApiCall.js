@@ -37,7 +37,7 @@ export const handleApiCall = async ({
 
     if (showToast) {
       toast.update(toastId, {
-        render: errorMsg || friendly,
+        render: friendly||errorMsg ,
         type: 'error',
         isLoading: false,
         autoClose: 4000,

@@ -12,28 +12,30 @@ import PolicyPages from "./Pages/PolicyPages";
 import ReviewsPage from "./Pages/ReviewPage";
 import GalleryDetails from "./Pages/GalleryDetailsPage";
 import { ToastContainer } from "react-toastify";
+import LoginForm from "./Pages/Admin/LoginPage";
 function App() {
   return (
     <>
-        <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/products/:id" element={<ProductDetailPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/dealership" element={<DealershipPage />} />
-        <Route path="/event" element={<EventsGalleryPage />} />
-        <Route path="event/:id" element={<EventDetails />} />
-        <Route path="/gallery/:eventId" element={<GalleryDetails />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/policy" element={<PolicyPages />} />
-        <Route path="/reviews" element={<ReviewsPage />} />
-        <Route path="*" element={<h1>404 Not Found</h1>} />
-      </Routes>
-    </Router>
-    <ToastContainer position="top-right" theme="colored" />
-    </>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/dealership" element={<DealershipPage />} />
+          <Route path="/event" element={<EventsGalleryPage />} />
+          <Route path="event/:id" element={<EventDetails />} />
+          <Route path="/gallery/:eventId" element={<GalleryDetails />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/policy" element={<PolicyPages />} />
+          <Route path="/reviews" element={<ReviewsPage />} />
+          <Route path="/admin/login" element={<LoginForm />} />
 
+          <Route path="*" element={<h1>404 Not Found</h1>} />
+        </Routes>
+      </Router>
+      <ToastContainer position="top-right" theme="colored" />
+    </>
   );
 }
 

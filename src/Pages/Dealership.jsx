@@ -1,3 +1,6 @@
+import { handleApiCall } from "../Utils/handleApiCall";
+import api from "../Utils/Api";
+import { API_ENDPOINTS } from "../Utils/Constant";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import {
@@ -5,18 +8,15 @@ import {
   Users,
   TrendingUp,
   Award,
-  CheckCircle,
   Send,
   ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import MainLayout from "../Layouts/MainLayout";
 
-
-import {Link as ScrollLink} from "react-scroll";  
+import { Link as ScrollLink } from "react-scroll";
 const DealershipPage = () => {
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState(null);
   const {
     register,
@@ -62,206 +62,155 @@ const DealershipPage = () => {
     },
   ];
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // In a real application, you would send this data to your backend
-    setSubmitSuccess(true);
-    reset();
-
-    // Reset success message after 5 seconds
-    setTimeout(() => {
-      setSubmitSuccess(false);
-    }, 5000);
+  const onSubmit = (formData) => {
+    handleApiCall({
+      apiFunc: () => api.post(API_ENDPOINTS.DELEARSHIP.CREATE, formData),
+      loadingMsg: "Submitting your dealership application...",
+      successMsg: "Application Submitted! We will contact you soon.",
+      errorMsg: "Failed to submit application. Please try again.",
+      onSuccess: () => {
+        reset();
+      },
+      onError: (err) => {
+        console.warn("Dealership Error:", err);
+      },
+    });
   };
 
   return (
     <MainLayout>
-    <div className=" min-h-screen bg-gray-50">
-      {/* 🚀 Page Header */}
-      <div className="relative py-24 md:py-32 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
-        {/* Animated Overlay Content */}
-        <motion.div
-          className="relative z-10 px-6 max-w-5xl mx-auto"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          {/* ✨ Catchy Heading */}
-          <motion.h1
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-wide drop-shadow-lg leading-snug"
-            whileHover={{ scale: 1.02 }}
-          >
-            Become a <span className="text-[#FF4500]">Dealer</span>
-          </motion.h1>
-
-          {/* 💡 Subheading for Engagement */}
-          <motion.p
-            className="mt-4 text-lg sm:text-xl md:text-2xl font-medium opacity-90 leading-relaxed"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.3 }}
-          >
-            Join our growing network of successful dealers and grow your
-            business with Moonal Udhyog
-          </motion.p>
-
-          {/* 🚀 Call-to-Action Buttons */}
+      <div className=" min-h-screen bg-gray-50">
+        {/* 🚀 Page Header */}
+        <div className="relative py-24 md:py-32 text-white text-center bg-gradient-to-r from-[#001F3F] via-[#002147] to-[#001F3F]">
+          {/* Animated Overlay Content */}
           <motion.div
-            className="mt-8 flex flex-col sm:flex-row justify-center gap-4"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <ScrollLink
-              to="dealership-form"
-              smooth={true}
-              duration={800}
-              className="bg-[#FF4500] text-white px-6 py-3 rounded-lg text-sm sm:text-lg font-semibold shadow-md hover:bg-red-600 transition transform hover:scale-105"
-            >
-              Apply for Dealership
-            </ScrollLink>
-            <a
-              href="/contact"
-              className="border-2 border-[#FF4500] text-[#FF4500] px-6 py-3 rounded-lg text-sm sm:text-lg font-semibold shadow-md hover:bg-[#FF4500] hover:text-white transition transform hover:scale-105"
-            >
-              Get in Touch
-            </a>
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* 🌟 Benifits with us */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          {/* ✨ Section Title */}
-          <motion.h2
-            className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center"
+            className="relative z-10 px-6 max-w-5xl mx-auto"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            Why <span className="text-[#FF4500]">Partner</span> With Us?
-          </motion.h2>
+            {/* ✨ Catchy Heading */}
+            <motion.h1
+              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-wide drop-shadow-lg leading-snug"
+              whileHover={{ scale: 1.02 }}
+            >
+              Become a <span className="text-[#FF4500]">Dealer</span>
+            </motion.h1>
 
-          {/* 🚀 Benefits Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: <TrendingUp className="h-10 w-10 text-white" />,
-                title: "Profitable Business",
-                desc: "High margins & growing market demand ensure great returns.",
-              },
-              {
-                icon: <Award className="h-10 w-10 text-white" />,
-                title: "Premium Products",
-                desc: "Represent a trusted brand with quality lubricants.",
-              },
-              {
-                icon: <Users className="h-10 w-10 text-white" />,
-                title: "Full Support",
-                desc: "Marketing, technical & business assistance provided.",
-              },
-              {
-                icon: <MapPin className="h-10 w-10 text-white" />,
-                title: "Exclusive Territory",
-                desc: "Enjoy secured business rights in your local market.",
-              },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                className="bg-gray-100 rounded-lg p-6 text-center shadow-md transition hover:shadow-lg"
-                whileHover={{ scale: 1.05 }}
+            {/* 💡 Subheading for Engagement */}
+            <motion.p
+              className="mt-4 text-lg sm:text-xl md:text-2xl font-medium opacity-90 leading-relaxed"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.3 }}
+            >
+              Join our growing network of successful dealers and grow your
+              business with Moonal Udhyog
+            </motion.p>
+
+            {/* 🚀 Call-to-Action Buttons */}
+            <motion.div
+              className="mt-8 flex flex-col sm:flex-row justify-center gap-4"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+            >
+              <ScrollLink
+                to="dealership-form"
+                smooth={true}
+                duration={800}
+                className="bg-[#FF4500] text-white px-6 py-3 rounded-lg text-sm sm:text-lg font-semibold shadow-md hover:bg-red-600 transition transform hover:scale-105"
               >
-                {/* 🔹 Icon Box */}
-                <div className="w-16 h-16 bg-[#FF4500] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  {item.icon}
-                </div>
-
-                {/* 🔸 Benefit Title */}
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                  {item.title}
-                </h3>
-
-                {/* 🔹 Benefit Description */}
-                <p className="text-gray-600">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+                Apply for Dealership
+              </ScrollLink>
+              <a
+                href="/contact"
+                className="border-2 border-[#FF4500] text-[#FF4500] px-6 py-3 rounded-lg text-sm sm:text-lg font-semibold shadow-md hover:bg-[#FF4500] hover:text-white transition transform hover:scale-105"
+              >
+                Get in Touch
+              </a>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
 
-      {/* Application Form Section */}
-      <section className="py-16 bg-gray-50" id="dealership-form">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
+        {/* 🌟 Benifits with us */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            {/* ✨ Section Title */}
             <motion.h2
-              className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4 text-center"
+              className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              Apply for <span className="text-[#FF4500]">Dealership</span>
+              Why <span className="text-[#FF4500]">Partner</span> With Us?
             </motion.h2>
 
-            <p className="text-gray-600 mb-8 text-center">
-              Fill out the form below to apply for a dealership opportunity with
-              Moonal Udhyog PVT.LTD.
-            </p>
+            {/* 🚀 Benefits Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                {
+                  icon: <TrendingUp className="h-10 w-10 text-white" />,
+                  title: "Profitable Business",
+                  desc: "High margins & growing market demand ensure great returns.",
+                },
+                {
+                  icon: <Award className="h-10 w-10 text-white" />,
+                  title: "Premium Products",
+                  desc: "Represent a trusted brand with quality lubricants.",
+                },
+                {
+                  icon: <Users className="h-10 w-10 text-white" />,
+                  title: "Full Support",
+                  desc: "Marketing, technical & business assistance provided.",
+                },
+                {
+                  icon: <MapPin className="h-10 w-10 text-white" />,
+                  title: "Exclusive Territory",
+                  desc: "Enjoy secured business rights in your local market.",
+                },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-gray-100 rounded-lg p-6 text-center shadow-md transition hover:shadow-lg"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  {/* 🔹 Icon Box */}
+                  <div className="w-16 h-16 bg-[#FF4500] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    {item.icon}
+                  </div>
 
-            {submitSuccess ? (
-              <motion.div
-                className="bg-[#002147] border border-[#FF4500] rounded-lg p-8 text-center shadow-lg"
-                initial={{ opacity: 0, y: 20 }}
+                  {/* 🔸 Benefit Title */}
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                    {item.title}
+                  </h3>
+
+                  {/* 🔹 Benefit Description */}
+                  <p className="text-gray-600">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Application Form Section */}
+        <section className="py-16 bg-gray-50" id="dealership-form">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <motion.h2
+                className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4 text-center"
+                initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.8 }}
               >
-                {/* 🎉 Success Icon */}
-                <div className="flex justify-center">
-                  <CheckCircle className="h-16 w-16 text-[#FF4500]" />
-                </div>
+                Apply for <span className="text-[#FF4500]">Dealership</span>
+              </motion.h2>
 
-                {/* ✅ Success Message */}
-                <h3 className="text-3xl font-bold text-white mt-4">
-                  🎉 Application Submitted Successfully!
-                </h3>
-                <p className="text-gray-300 mt-2 text-lg">
-                  Thank you for your interest in becoming a{" "}
-                  <span className="font-semibold text-[#FF4500]">
-                    Moonal Udhyog
-                  </span>{" "}
-                  dealer. Our team will review your application and contact you
-                  within{" "}
-                  <span className="font-semibold text-[#FF4500]">
-                    5-7 business days
-                  </span>
-                  .
-                </p>
+              <p className="text-gray-600 mb-8 text-center">
+                Fill out the form below to apply for a dealership opportunity
+                with Moonal Udhyog PVT.LTD.
+              </p>
 
-                {/* 📧 Contact Information */}
-                <p className="text-gray-300 mt-4">
-                  If you have any questions, feel free to reach out:
-                  <span className="font-semibold block mt-1 text-[#FF4500]">
-                    📩 dealership@moonaludhyog.com
-                  </span>
-                </p>
-
-                {/* 🔗 Call-to-Actions */}
-                <div className="mt-6 flex justify-center gap-4">
-                  <a
-                    href="/"
-                    className="bg-[#FF4500] text-white px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-red-600 transition transform hover:scale-105"
-                  >
-                    Return Home
-                  </a>
-                  <a
-                    href="/contact"
-                    className="border-2 border-[#FF4500] text-[#FF4500] px-6 py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-[#FF4500] hover:text-white transition transform hover:scale-105"
-                  >
-                    Contact Support
-                  </a>
-                </div>
-              </motion.div>
-            ) : (
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="bg-white rounded-lg p-8 shadow-md"
@@ -391,17 +340,17 @@ const DealershipPage = () => {
                         type="text"
                         id="companyName"
                         className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none ${
-                          errors.companyName
+                          errors.businessName
                             ? "border-red-500"
                             : "border-gray-300"
                         }`}
-                        {...register("companyName", {
+                        {...register("businessName", {
                           required: "Company name is required",
                         })}
                       />
-                      {errors.companyName && (
+                      {errors.businessName && (
                         <p className="mt-1 text-sm text-red-600">
-                          {errors.companyName.message}
+                          {errors.businessName.message}
                         </p>
                       )}
                     </div>
@@ -487,7 +436,7 @@ const DealershipPage = () => {
                     Location Information
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="md:col-span-2">
+                    <div>
                       <label
                         htmlFor="address"
                         className="block text-sm font-medium text-gray-700 mb-1"
@@ -498,15 +447,42 @@ const DealershipPage = () => {
                         type="text"
                         id="address"
                         className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none ${
-                          errors.address ? "border-red-500" : "border-gray-300"
+                          errors.businessAddress
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
-                        {...register("address", {
-                          required: "Business address is required",
+                        {...register("businessAddress", {
+                          required: "Business Address is required",
                         })}
                       />
-                      {errors.address && (
+                      {errors.businessAddress && (
                         <p className="mt-1 text-sm text-red-600">
-                          {errors.address.message}
+                          {errors.businessAddress.message}
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="state"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        Business State *
+                      </label>
+                      <input
+                        type="text"
+                        id="state"
+                        className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none ${
+                          errors.businessState
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
+                        {...register("businessState", {
+                          required: "Business State is required",
+                        })}
+                      />
+                      {errors.businessState && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.businessState.message}
                         </p>
                       )}
                     </div>
@@ -522,13 +498,17 @@ const DealershipPage = () => {
                         type="text"
                         id="city"
                         className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none ${
-                          errors.city ? "border-red-500" : "border-gray-300"
+                          errors.businessCity
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
-                        {...register("city", { required: "City is required" })}
+                        {...register("businessCity", {
+                          required: "business City is required",
+                        })}
                       />
-                      {errors.city && (
+                      {errors.businessCity && (
                         <p className="mt-1 text-sm text-red-600">
-                          {errors.city.message}
+                          {errors.businessCity.message}
                         </p>
                       )}
                     </div>
@@ -544,15 +524,17 @@ const DealershipPage = () => {
                         type="text"
                         id="district"
                         className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none ${
-                          errors.district ? "border-red-500" : "border-gray-300"
+                          errors.businessDistrict
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
-                        {...register("district", {
-                          required: "District is required",
+                        {...register("businessDistrict", {
+                          required: "business District is required",
                         })}
                       />
-                      {errors.district && (
+                      {errors.businessDistrict && (
                         <p className="mt-1 text-sm text-red-600">
-                          {errors.district.message}
+                          {errors.businessDistrict.message}
                         </p>
                       )}
                     </div>
@@ -575,7 +557,7 @@ const DealershipPage = () => {
                       rows={3}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none"
                       placeholder="Please describe your experience in the lubricant industry..."
-                      {...register("experience")}
+                      {...register("businessExperience")}
                     ></textarea>
                   </div>
 
@@ -670,65 +652,65 @@ const DealershipPage = () => {
                   </button>
                 </div>
               </form>
-            )}
+              {/* )} */}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* FAQs Section */}
-      <section className="py-16 bg-[#F9FAFB]">
-        <div className="container mx-auto px-4">
-          {/* Heading */}
-          <h2 className="text-4xl font-bold text-[#002147] mb-12 text-center">
-            Frequently Asked Questions
-          </h2>
+        {/* FAQs Section */}
+        <section className="py-16 bg-[#F9FAFB]">
+          <div className="container mx-auto px-4">
+            {/* Heading */}
+            <h2 className="text-4xl font-bold text-[#002147] mb-12 text-center">
+              Frequently Asked Questions
+            </h2>
 
-          {/* FAQs Accordion */}
-          <div className="max-w-3xl mx-auto">
-            {faqs.map((faq, index) => (
-              <div key={index} className="mb-5">
-                {/* FAQ Question Button */}
-                <button
-                  className="flex justify-between items-center w-full p-5 bg-white hover:bg-[#FF4500]/10 border border-gray-300 rounded-lg text-left focus:outline-none shadow-sm transition"
-                  onClick={() => toggleAccordion(index)}
+            {/* FAQs Accordion */}
+            <div className="max-w-3xl mx-auto">
+              {faqs.map((faq, index) => (
+                <div key={index} className="mb-5">
+                  {/* FAQ Question Button */}
+                  <button
+                    className="flex justify-between items-center w-full p-5 bg-white hover:bg-[#FF4500]/10 border border-gray-300 rounded-lg text-left focus:outline-none shadow-sm transition"
+                    onClick={() => toggleAccordion(index)}
+                  >
+                    <span className="font-semibold text-[#002147] text-lg">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className={`h-6 w-6 text-[#FF4500] transition-transform ${
+                        activeAccordion === index ? "transform rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {/* FAQ Answer */}
+                  {activeAccordion === index && (
+                    <div className="p-5 bg-white border-l-4 border-[#FF4500] rounded-b-lg mt-2 shadow-md">
+                      <p className="text-gray-700 leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Contact Info */}
+            <div className="text-center mt-12">
+              <p className="text-gray-700 text-lg font-medium mb-4">
+                Still have questions about becoming a dealer?
+                <Link
+                  to="/contact#contact-form"
+                  className="  text-[#FF4500]   font-light"
                 >
-                  <span className="font-semibold text-[#002147] text-lg">
-                    {faq.question}
-                  </span>
-                  <ChevronDown
-                    className={`h-6 w-6 text-[#FF4500] transition-transform ${
-                      activeAccordion === index ? "transform rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                {/* FAQ Answer */}
-                {activeAccordion === index && (
-                  <div className="p-5 bg-white border-l-4 border-[#FF4500] rounded-b-lg mt-2 shadow-md">
-                    <p className="text-gray-700 leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ))}
+                  &nbsp; Contact Our Dealership Team
+                </Link>
+              </p>
+            </div>
           </div>
-
-          {/* Contact Info */}
-          <div className="text-center mt-12">
-            <p className="text-gray-700 text-lg font-medium mb-4">
-              Still have questions about becoming a dealer?
-              <Link
-                to="/contact#contact-form"
-                className="  text-[#FF4500]   font-light"
-              >
-               &nbsp; Contact Our Dealership Team
-              </Link>
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
     </MainLayout>
   );
 };

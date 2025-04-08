@@ -178,7 +178,7 @@ const ContactPage = () => {
                         field === "email"
                           ? "email"
                           : field === "phone"
-                          ? "tel"
+                          ? "number"
                           : "text"
                       }
                       className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#FF4500] focus:outline-none ${
