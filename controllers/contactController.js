@@ -63,4 +63,21 @@ const getContact = async (req, res) => {
   }
 };
 
-module.exports = { createContact, getContacts, getContact };
+// delete a contact
+const deleteContact = async (req, res) => {
+  try {
+    const contact_id = req.params.id;
+    if (!contact_id) {
+      return res.status(400).json({ message: "Please provide a contact id" });
+    }
+    const contact = await Contact.findByIdAndDelete(contact_id);
+    if (!contact) {
+      return res.status(404).json({ message: "Contact not found" });
+    }
+    res.status(200).json({ message: "Contact deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createContact, getContacts, getContact, deleteContact };

@@ -28,7 +28,11 @@ connectDB();
 app.use(express.json());
 
 // Middleware to enable CORS
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // frontend URL
+  credentials: true,
+}));
+
 
 // Middleware to log HTTP requests
 app.use(morgan("dev"));

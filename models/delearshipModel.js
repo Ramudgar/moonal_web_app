@@ -20,49 +20,49 @@ const delearshipSchema = new mongoose.Schema({
     required: [true, "Please provide a phone number"],
     unique: true,
   },
-  // Bussiness details
-  bussinessName: {
+  // Business details
+  businessName: {
     type: String,
     required: [true, "Please provide a company name"],
   },
 
-  bussinessAddress: {
+  businessAddress: {
     type: String,
     required: [true, "Please provide a address"],
   },
-  bussinessType: {
+  businessType: {
     type: String,
-    required: [true, "Please provide a bussiness type"],
+    required: [true, "Please provide a business type"],
   },
-  yearsInBussiness: {
+  yearsInBusiness: {
     type: String,
-    required: [true, "Please provide a years in bussiness"],
+    required: [true, "Please provide a years in business"],
   },
-  bussinessCity: {
+  businessCity: {
     type: String,
     required: [true, "Please provide a city"],
   },
-  bussinessDistrict: {
+  businessDistrict: {
     type: String,
     required: [true, "Please provide a district"],
   },
-  bussinessState: {
+  businessState: {
     type: String,
     required: [true, "Please provide a state"],
   },
-  bussinessExperience: {
+  businessExperience: {
     type: String,
     required: [true, "Please provide a experience"],
   },
-  plannedInvestmentRange: {
+  investment: {
     type: String,
     required: [true, "Please provide a investment range"],
   },
-  additionalComments: {
+  comments: {
     type: String,
     required: [true, "Please provide a additional comments"],
   },
-  acceptTerms: {
+  terms: {
     type: Boolean,
     required: [true, "Please accept terms"],
   },

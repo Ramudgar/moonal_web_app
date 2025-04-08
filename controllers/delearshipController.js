@@ -8,33 +8,61 @@ const delearshipRequest = async (req, res) => {
       lastName,
       email,
       phone,
-      bussinessName,
-      bussinessAddress,
-      bussinessType,
-      yearsInBussiness,
-      bussinessCity,
-      bussinessDistrict,
-      bussinessState,
-      bussinessExperience,
-      plannedInvestmentRange,
+      businessName,
+      businessAddress,
+      businessType,
+      yearsInBusiness,
+      businessCity,
+      businessDistrict,
+      businessState,
+      businessExperience,
+      investment,
+      comments,
+      terms,
     } = req.body;
+
+    console.log(req.body);
 
     if (
       !firstName ||
       !lastName ||
       !email ||
       !phone ||
-      !bussinessName ||
-      !bussinessAddress ||
-      !bussinessType ||
-      !yearsInBussiness ||
-      !bussinessCity ||
-      !bussinessDistrict ||
-      !bussinessState ||
-      !bussinessExperience ||
-      !plannedInvestmentRange
+      !businessName ||
+      !businessAddress ||
+      !businessType ||
+      !yearsInBusiness ||
+      !businessCity ||
+      !businessDistrict ||
+      !businessState ||
+      !businessExperience ||
+      !investment ||
+      !comments ||
+      !terms
     ) {
       return res.status(400).json({ message: "Please enter all fields" });
+    }
+
+    // Check if the email and/or phone already exists
+    const existingDelearship = await Delearship.findOne({
+      $or: [{ email }, { phone }],
+    });
+    if (existingDelearship) {
+      return res.status(400).json({
+        message: "Email or phone number already exists",
+      });
+    }
+    // Check if the email is valid
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Please enter a valid email" });
+    }
+    // Check if the phone number is valid
+    const phoneRegex = /^\+?\d{10,14}$/;
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({
+        message: "Please enter a valid phone number",
+      });
     }
 
     const delearship = await Delearship.create({
@@ -42,15 +70,17 @@ const delearshipRequest = async (req, res) => {
       lastName,
       email,
       phone,
-      bussinessName,
-      bussinessAddress,
-      bussinessType,
-      yearsInBussiness,
-      bussinessCity,
-      bussinessDistrict,
-      bussinessState,
-      bussinessExperience,
-      plannedInvestmentRange,
+      businessName,
+      businessAddress,
+      businessType,
+      yearsInBusiness,
+      businessCity,
+      businessDistrict,
+      businessState,
+      businessExperience,
+      investment,
+      comments,
+      terms,
     });
 
     res.status(201).json({
