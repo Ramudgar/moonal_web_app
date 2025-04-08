@@ -31,22 +31,22 @@ const AdminLayout = () => {
           <main className="p-6">
             <Routes>
     
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/dealership" element={<DealershipRequests />} />
-              <Route path="/gallery" element={<GalleryManagement />} />
-              <Route path="/events" element={<EventManagement />} />
-              <Route path="/team" element={<TeamManagement />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="contacts" element={<Contacts />} />
+              <Route path="dealership" element={<DealershipRequests />} />
+              <Route path="gallery" element={<GalleryManagement />} />
+              <Route path="events" element={<EventManagement />} />
+              <Route path="team" element={<TeamManagement />} />
               <Route
-                path="/testimonials"
+                path="testimonials"
                 element={<AdminTestimonialManagement />}
               />
               <Route
-                path="/subscribers"
+                path="subscribers"
                 element={<AdminSubscriberManagement />}
               />
-              <Route path="/products" element={<AdminProductManagement />} />
-              <Route path="/settings" element={<AdminSettings />} />
+              <Route path="products" element={<AdminProductManagement />} />
+              <Route path="settings" element={<AdminSettings />} />
               <Route path="*" element={<h1>404 Not Found</h1>} />
             </Routes>
           </main>

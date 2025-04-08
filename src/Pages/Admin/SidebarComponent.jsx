@@ -1,10 +1,15 @@
 import PropTypes from "prop-types";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "remixicon/fonts/remixicon.css";
+import { handleApiCall } from "../../Utils/handleApiCall";
+import { useDispatch } from "react-redux";
+import { logoutUser, resetAuthState } from "../../features/auth/authSlice";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation(); // Get current path
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const menuItems = [
     { name: "Dashboard", icon: "ri-dashboard-fill", path: "/admin/dashboard" },
@@ -35,6 +40,17 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     },
   ];
 
+  const handleLogout = () => {
+    handleApiCall({
+      apiFunc: () => dispatch(logoutUser()).unwrap(),
+      successMsg: "Logged out successfully",
+      onSuccess: () => {
+        dispatch(resetAuthState());
+        navigate("/admin/login");
+      },
+    });
+  };
+
   return (
     <motion.div
       initial={{ x: -250 }}
@@ -64,6 +80,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           </Link>
         ))}
       </nav>
+      <div className="flex-grow"></div>
+      <div className="p-4 border-t border-gray-600">
+        <button
+          onClick={handleLogout}
+          className="flex items-center w-full text-left px-6 py-3 text-red-500 hover:bg-red-500 hover:text-white transition"
+        >
+          <i className="ri-logout-circle-r-fill text-xl mr-3"></i>
+          Logout
+        </button>
+      </div>
     </motion.div>
   );
 };

@@ -21,19 +21,15 @@ import { getCurrentUser } from "./features/auth/authSlice";
 
 function App() {
   const dispatch = useDispatch();
-  const {user}=useSelector((state) => state.auth);
-  // Check if user is logged in
-  // useEffect(() => {
-  //   if (user) {
-  //     dispatch(getCurrentUser());
-  //   }
-  // }, [user, dispatch]);
-
-  console.log("user", user);
+  const { user, isUserChecked } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
+  // Check if user is fetched
+  if (!isUserChecked) {
+    return null; // or a loading spinner
+  }
   return (
     <>
       <Router>
@@ -51,14 +47,18 @@ function App() {
           <Route path="/policy" element={<PolicyPages />} />
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/admin/login" element={<LoginForm />} />
-
           {/* Admin Routes */}
+
           <Route
             path="/admin/*"
             element={
-              <ProtectedRoute>
-                <AdminLayout />
-              </ProtectedRoute>
+              user && user.role === "admin" ? (
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              ) : (
+                <h1>404 Not Found</h1>
+              )
             }
           />
 
