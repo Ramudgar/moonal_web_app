@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-
 // const authMiddleware = (req, res, next) => {
 //   const authHeader = req.headers["authorization"]; // header keys are lowercase
 
@@ -21,9 +19,9 @@ const jwt = require("jsonwebtoken");
 // module.exports = authMiddleware;
 
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/userModel");
 
-const authMiddleware = async (req, res, next) => {
+const protect = async (req, res, next) => {
   try {
     // 🔍 Get token from cookies
     const token = req.cookies.token;
@@ -49,4 +47,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = protect;

@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -28,11 +28,23 @@ connectDB();
 app.use(express.json());
 
 // Middleware to enable CORS
-app.use(cors({
-  origin: 'http://localhost:3000', // frontend URL
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000", // frontend URL
+    credentials: true,
+  })
+);
 
+// Middleware to parse cookies
+// This is useful for reading cookies sent by the client
+// and for setting cookies in the response.
+// For example, if you want to set a JWT token in a cookie after login
+// or to read cookies for authentication purposes.
+// It allows you to access cookies in the request object (req.cookies).
+// It also allows you to set cookies in the response object (res.cookie).
+// This is especially important for authentication tokens,
+// as they are often sent as cookies for security reasons.
+app.use(cookieParser());
 
 // Middleware to log HTTP requests
 app.use(morgan("dev"));
@@ -52,7 +64,6 @@ app.use("/api/v1/gallery", galleryRoute);
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/products", productRoute);
 app.use("/api/v1/team", teamRoute);
-
 
 import("chalk").then((chalk) => {
   app.listen(PORT, () => {

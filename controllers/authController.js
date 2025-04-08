@@ -69,6 +69,7 @@ const login = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -76,4 +77,26 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+// Logout a user  
+const logout = (req, res) => {
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Strict",
+    maxAge: 0, // Set cookie to expire immediately
+  });
+  res.status(200).json({ message: "Logout successful" });
+};
+
+// persist user data
+
+const getMe = (req, res) => {
+  try {
+    // The protect middleware should already attach req.user
+    res.status(200).json({ user: req.user });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch user info" });
+  }
+};
+
+module.exports = { register, login, logout, getMe };
