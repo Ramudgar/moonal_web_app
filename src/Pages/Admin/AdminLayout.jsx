@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 
 import { useState } from "react";
 import Sidebar from "./SidebarComponent";
@@ -14,12 +14,12 @@ import AdminSubscriberManagement from "./AdminSubscriberManagement";
 import AdminProductManagement from "./AdminProductPage";
 import AdminSettings from "./settingsComponent";
 
+
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   return (
-    <Router>
       <div className="flex">
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <div
@@ -30,34 +30,28 @@ const AdminLayout = () => {
           <Header toggleSidebar={toggleSidebar} />
           <main className="p-6">
             <Routes>
-              <Route path="/admin/dashboard" element={<Dashboard />} />
-              <Route path="/admin/contacts" element={<Contacts />} />
+    
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/contacts" element={<Contacts />} />
+              <Route path="/dealership" element={<DealershipRequests />} />
+              <Route path="/gallery" element={<GalleryManagement />} />
+              <Route path="/events" element={<EventManagement />} />
+              <Route path="/team" element={<TeamManagement />} />
               <Route
-                path="/admin/dealership"
-                element={<DealershipRequests />}
-              />
-              <Route path="/admin/gallery" element={<GalleryManagement />} />
-              <Route path="/admin/events" element={<EventManagement />} />
-              <Route path="/admin/team" element={<TeamManagement />} />
-              <Route
-                path="/admin/testimonials"
+                path="/testimonials"
                 element={<AdminTestimonialManagement />}
               />
               <Route
-                path="/admin/subscribers"
+                path="/subscribers"
                 element={<AdminSubscriberManagement />}
               />
-              <Route
-                path="/admin/products"
-                element={<AdminProductManagement />}
-              />
-              <Route path="/admin/settings" element={<AdminSettings />} />
+              <Route path="/products" element={<AdminProductManagement />} />
+              <Route path="/settings" element={<AdminSettings />} />
               <Route path="*" element={<h1>404 Not Found</h1>} />
             </Routes>
           </main>
         </div>
       </div>
-    </Router>
   );
 };
 

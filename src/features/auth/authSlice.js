@@ -94,6 +94,7 @@ const authSlice = createSlice({
     user: null,
     error: null,
     successMessage: "",
+    isUserChecked: false, // ✅ new flag
   },
   reducers: {
     resetAuthState: (state) => {
@@ -124,15 +125,21 @@ const authSlice = createSlice({
       .addCase(getCurrentUser.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.isUserChecked = false;
+
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        state.isUserChecked = true; // ✅ set to true when user is fetched
+
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
         state.error = action.payload;
+        state.isUserChecked = true; // ✅ important
+
       })
 
       // 🔓 LOGOUT

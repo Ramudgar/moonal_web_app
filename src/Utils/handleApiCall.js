@@ -24,7 +24,7 @@ export const handleApiCall = async ({
 
     if (showToast) {
       toast.update(toastId, {
-        render: successMsg || data?.message || 'Success!',
+        render:  data?.message || successMsg || 'Success!',
         type: 'success',
         isLoading: false,
         autoClose: 3000,

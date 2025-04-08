@@ -12,12 +12,33 @@ import PolicyPages from "./Pages/PolicyPages";
 import ReviewsPage from "./Pages/ReviewPage";
 import GalleryDetails from "./Pages/GalleryDetailsPage";
 import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./Components/ProtectedRoute";
+import AdminLayout from "./Pages/Admin/AdminLayout";
 import LoginForm from "./Pages/Admin/LoginPage";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getCurrentUser } from "./features/auth/authSlice";
+
 function App() {
+  const dispatch = useDispatch();
+  const {user}=useSelector((state) => state.auth);
+  // Check if user is logged in
+  // useEffect(() => {
+  //   if (user) {
+  //     dispatch(getCurrentUser());
+  //   }
+  // }, [user, dispatch]);
+
+  console.log("user", user);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
   return (
     <>
       <Router>
         <Routes>
+          {/* public routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
@@ -30,6 +51,16 @@ function App() {
           <Route path="/policy" element={<PolicyPages />} />
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/admin/login" element={<LoginForm />} />
+
+          {/* Admin Routes */}
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>

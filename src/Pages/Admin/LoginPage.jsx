@@ -20,11 +20,11 @@ const LoginForm = () => {
   const onSubmit = (formData) => {
     handleApiCall({
       loadingMsg: "Logging in...",
-      successMsg: "Welcome back!",
+      successMsg: "",
       errorMsg: "Login failed. Please check your credentials.",
       apiFunc: () => dispatch(loginUser(formData)).unwrap(),
       onSuccess: () => {
-        navigate("/dashboard"); // or wherever you want
+        navigate("/admin/dashboard"); // or wherever you want
       },
     });
   };
