@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import contactReducer from "../features/contact/contactSlice";
 import delearshipReducer from "../features/delearship/delearshipSlice";
 import authReducer from "../features/auth/authSlice";
+import productReducer from "../features/product/productSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     contact: contactReducer,
     delearship: delearshipReducer,
+    products: productReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

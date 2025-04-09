@@ -16,7 +16,7 @@ const ProtectedRoute = ({
   if (!user) {
     return <Navigate to={redirectTo} replace />;
   }
-  console.log("user", user);
+  // console.log("user", user);
 
   if (allowedRole && user.role !== allowedRole) {
     return <Navigate to="/unauthorized" replace />;
