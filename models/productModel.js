@@ -1,3 +1,4 @@
+const e = require("express");
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
@@ -17,13 +18,31 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, "Image is required"],
   },
+  public_id: {
+    type: String,
+    required: [true, "Public ID is required"],
+  },
   category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
-    required: [true, "Category is required"],
+    type: String,
+    enum: {
+      values: ["engine oil", "gear oil", "brake oil", "coolant", "grease"],
+      message: "Category is not valid",
+    },
+    validate: {
+      validator: function (value) {
+        return [
+          "engine oil",
+          "gear oil",
+          "brake oil",
+          "coolant",
+          "grease",
+        ].includes(value);
+      },
+      required: [true, "Category is required"],
+    },
   },
   suitableFor: {
-    type: String,
+    type: [String],
     required: [true, "Suitable for is required"],
   },
 
@@ -32,11 +51,11 @@ const productSchema = new mongoose.Schema({
     required: [true, "Packaging is required"],
   },
   specifications: {
-    type: String,
+    type: [String],
   },
 
-  Benifits: {
-    type: String,
+  benefits: {
+    type: [String],
   },
   createdAt: {
     type: Date,

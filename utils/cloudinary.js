@@ -21,14 +21,24 @@ if (
 const uploadImage = async (image, folder = "uploads/gallery") => {
   try {
     const result = await cloudinary.uploader.upload(image, {
-      // upload_preset: "your_upload_preset",//it is optional if you are using uploading image from server side code like nodejs then you needn't to use this
       folder, // Organize uploads in a specific folder
-      public_id: `img_${Date.now()}`, // Use a unique ID
+      public_id: `img_${Date.now()}`,
     });
-    return result;
+    return result; // includes secure_url, public_id, etc.
   } catch (error) {
     console.error("Image upload failed:", error);
     throw new Error("Failed to upload image to Cloudinary");
+  }
+};
+
+// Function to delete an image from Cloudinary
+const deleteImage = async (publicId) => {
+  try {
+    const result = await cloudinary.uploader.destroy(publicId);
+    return result;
+  } catch (error) {
+    console.error("Image deletion failed:", error);
+    throw new Error("Failed to delete image from Cloudinary");
   }
 };
 
@@ -50,11 +60,9 @@ const getAutoCropUrl = (publicId, width = 500, height = 500) => {
   });
 };
 
-// Example Usage
-const optimizedUrl = getOptimizedImageUrl("gallery");
-// console.log("Optimized URL:", optimizedUrl);
-
-const autoCropUrl = getAutoCropUrl("gallery");
-// console.log("Auto-Cropped URL:", autoCropUrl);
-
-module.exports = { uploadImage, getOptimizedImageUrl, getAutoCropUrl };
+module.exports = {
+  uploadImage,
+  deleteImage,
+  getOptimizedImageUrl,
+  getAutoCropUrl,
+};
