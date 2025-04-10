@@ -35,7 +35,7 @@ router.put("/:id", upload.single("image"),protect,authorize("admin"), updateProd
 // @ route DELETE /api/v1/products/:id
 // @ desc Delete a product by ID
 // @ access Private
-router.delete("/:id", deleteProduct);
+router.delete("/:id", protect,authorize("admin"),deleteProduct);
 
 // export the router
 module.exports = router;
