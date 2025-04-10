@@ -4,6 +4,7 @@ import contactReducer from "../features/contact/contactSlice";
 import delearshipReducer from "../features/delearship/delearshipSlice";
 import authReducer from "../features/auth/authSlice";
 import productReducer from "../features/product/productSlice";
+import eventReducer from "../features/event/eventSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     contact: contactReducer,
     delearship: delearshipReducer,
     products: productReducer,
+    event: eventReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

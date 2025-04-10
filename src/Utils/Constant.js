@@ -30,4 +30,12 @@ export const API_ENDPOINTS = {
     UPDATE: (id) => `${API_BASE}/products/${id}`,
     DELETE: (id) => `${API_BASE}/products/${id}`,
   },
+  EVENTS: {
+    CREATE: `${API_BASE}/events/create`,
+    UPDATE: (id) => `${API_BASE}/events/update/${id}`,
+    GET_ALL_WITH_GALLERY: `${API_BASE}/events/all-with-gallery`,
+    GET_ONE: (id) => `${API_BASE}/events/${id}`,
+    DELETE_ONE: (id) => `${API_BASE}/events/${id}`,
+    DELETE_ALL: `${API_BASE}/events`,
+  },
 };

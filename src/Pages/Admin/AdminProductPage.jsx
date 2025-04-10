@@ -7,6 +7,7 @@ import { handleApiCall } from "../../Utils/handleApiCall";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createProduct,
+  deleteProduct,
   getAllProducts,
   updateProduct,
 } from "../../features/product/productSlice";
@@ -84,13 +85,6 @@ const AdminProductManagement = () => {
     currentPage * itemsPerPage
   );
 
-  const handleDeleteProduct = () =>
-    // id
-    {
-      // setProducts((prev) => prev.filter((p) => p.id !== id));
-      setConfirmDelete(null);
-    };
-
   // 👀 State for managing product creation and editing
 
   const [editMode, setEditMode] = useState(false);
@@ -103,6 +97,20 @@ const AdminProductManagement = () => {
     setEditingProduct(null);
     setExistingImagePreview(null); // ✅ clear
     reset(); // clear form
+  };
+
+  // handle delete product
+  const handleDeleteProduct = (id) => {
+    handleApiCall({
+      apiFunc: () => dispatch(deleteProduct(id)).unwrap(),
+      loadingMsg: "Deleting product...",
+      successMsg: "Product deleted successfully!",
+      errorMsg: "Failed to delete product.",
+      onSuccess: () => {
+        setConfirmDelete(null);
+        dispatch(getAllProducts());
+      },
+    });
   };
 
   // 👀 Function to handle product creation and editing
@@ -526,7 +534,7 @@ const AdminProductManagement = () => {
               </p>
               <div className="flex justify-center gap-4">
                 <button
-                  onClick={() => handleDeleteProduct(confirmDelete.id)}
+                  onClick={() => handleDeleteProduct(confirmDelete._id)}
                   className="bg-red-100 text-red-700 px-4 py-2 rounded-lg hover:bg-red-200"
                 >
                   Delete

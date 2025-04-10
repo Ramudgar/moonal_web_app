@@ -1,8 +1,23 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDropzone } from "react-dropzone";
+import { handleApiCall } from "../../Utils/handleApiCall";
+import { useDispatch } from "react-redux";
+import { createEvent } from "../../features/event/eventSlice";
+const INITIAL_EVENT = {
+  title: "",
+  startDate: "",
+  endDate: "",
+  startTime: "",
+  endTime: "",
+  location: "",
+  description: "",
+  highlights: "",
+  images: [],
+};
 
 const EventManagement = () => {
+  const dispatch = useDispatch();
   const [events, setEvents] = useState([
     {
       id: 1,
@@ -41,51 +56,84 @@ const EventManagement = () => {
     event.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddEvent = (e) => {
+  const handleAddEvent = async (e) => {
     e.preventDefault();
-    if (
-      !newEvent.title ||
-      !newEvent.date ||
-      !newEvent.location ||
-      !newEvent.time
-    )
-      return;
-    const newItem = { id: Date.now(), ...newEvent };
-    setEvents([...events, newItem]);
-    setNewEvent({
-      title: "",
-      date: "",
-      time: "",
-      location: "",
-      description: "",
-      highlights: "",
-      images: [],
-    });
-    setIsAdding(false);
-  };
 
+    const {
+      title,
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      location,
+      description,
+      highlights,
+    } = newEvent;
+
+    // 🛑 Basic validation
+    if (
+      !title ||
+      !startDate ||
+      !endDate ||
+      !startTime ||
+      !endTime ||
+      !location
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    // ✅ Prepare FormData
+    const formData = new FormData();
+    formData.append("eventTitle", title);
+    formData.append("startDate", startDate);
+    formData.append("endDate", endDate);
+    formData.append("startTime", startTime);
+    formData.append("endTime", endTime);
+    formData.append("location", location);
+    formData.append("description", description || "");
+    formData.append("highlights", highlights || "");
+
+    // ✅ Append each uploaded image
+    uploadedFiles.forEach((file) => {
+      formData.append("images", file); // multiple images supported by multer
+    });
+
+    // 🛑 Basic validation for images
+    if (uploadedFiles.length === 0) {
+      alert("Please upload at least one image.");
+      return;
+    }
+
+    handleApiCall({
+      apiFunc: () => dispatch(createEvent(formData)).unwrap(),
+      loadingMsg: "creating event...",
+      successMsg: "Event created successfully!",
+      errorMsg: "Failed to create event.",
+      onSuccess: () => {
+        setIsAdding(false);
+        setNewEvent(INITIAL_EVENT);
+        setUploadedFiles([]);
+      },
+    });
+  };
   // Inside your component
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
-  const [newEvent, setNewEvent] = useState({
-    title: "",
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
-    location: "",
-    description: "",
-    highlights: "",
-    images: [],
-  });
+  const [newEvent, setNewEvent] = useState(INITIAL_EVENT);
 
   const onDrop = (acceptedFiles) => {
-    setUploadedFiles((prev) => [...prev, ...acceptedFiles]);
+    const newFiles = acceptedFiles.filter(
+      (file) =>
+        !uploadedFiles.some((f) => f.name === file.name && f.size === file.size)
+    );
+
+    setUploadedFiles((prev) => [...prev, ...newFiles]);
     setNewEvent((prev) => ({
       ...prev,
       images: [
         ...prev.images,
-        ...acceptedFiles.map((file) => URL.createObjectURL(file)),
+        ...newFiles.map((file) => URL.createObjectURL(file)),
       ],
     }));
   };

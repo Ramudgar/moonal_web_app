@@ -60,6 +60,25 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
+// this is for deleting a product
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await api.delete(`${API_ENDPOINTS.PRODUCT.DELETE(id)}`);
+      // console.log("res", res);
+      return {
+        message: res.data.message, // ✅ Include message
+        data: res.data, // ✅ Include deleted product (with _id)
+      };
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
+// this is for getting a single product
+
 const productSlice = createSlice({
   name: "products",
   initialState: {
@@ -115,7 +134,6 @@ const productSlice = createSlice({
         state.successMessage = action.payload.message || "Product updated!";
         const index = state.products.findIndex(
           (product) => product._id === action.payload.data._id
-
         );
         if (index !== -1) {
           state.products[index] = action.payload.data; // Update the product in the list
@@ -124,6 +142,22 @@ const productSlice = createSlice({
       .addCase(updateProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed to update product";
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.successMessage = action.payload.message || "Product deleted!";
+        state.products = state.products.filter(
+          (product) => product._id !== action.payload.data._id
+        );
+      })
+
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed to delete product";
       });
   },
 });
