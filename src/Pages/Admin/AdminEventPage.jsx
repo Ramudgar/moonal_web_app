@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDropzone } from "react-dropzone";
 import { handleApiCall } from "../../Utils/handleApiCall";
-import { useDispatch } from "react-redux";
-import { createEvent } from "../../features/event/eventSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { createEvent, getEvents } from "../../features/event/eventSlice";
 const INITIAL_EVENT = {
   title: "",
   startDate: "",
@@ -18,42 +18,24 @@ const INITIAL_EVENT = {
 
 const EventManagement = () => {
   const dispatch = useDispatch();
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      title: "Product Launch Event",
-      startDate: "2024-03-10",
-      endDate: "2024-03-12",
-      startTime: "10:00 AM",
-      endTime: "5:00 PM",
-      location: "Kathmandu",
-      description: "Showcasing our new product line.",
-      highlights: "Keynote, Networking, Demos",
-      images: [
-        "https://www.shutterstock.com/image-photo/shipyard-started-serve-public-space-600nw-2486297109.jpg",
-      ],
-    },
-    {
-      id: 2,
-      title: "Dealer Conference",
-      startDate: "2024-03-10",
-      endDate: "2024-03-12",
-      startTime: "10:00 AM",
-      endTime: "5:00 PM",
-      location: "Pokhara",
-      description: "Annual networking for dealership partners.",
-      highlights: "Awards, Seminars, Dinner",
-      images: [
-        "https://content.sharesansar.com/photos/Ranjana/01/1000701421%20(2).jpg",
-      ],
-    },
-  ]);
+  const { events } = useSelector((state) => state.event);
+  // console.log("events", events);
 
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [isAdding, setIsAdding] = useState(false);
 
+  const totalPages = Math.ceil(events.length / itemsPerPage);
+
   const filteredEvents = events.filter((event) =>
-    event.title.toLowerCase().includes(searchTerm.toLowerCase())
+    event.eventTitle.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  // Paginate events
+  const paginatedEvents = filteredEvents.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handleAddEvent = async (e) => {
@@ -114,6 +96,7 @@ const EventManagement = () => {
         setIsAdding(false);
         setNewEvent(INITIAL_EVENT);
         setUploadedFiles([]);
+        dispatch(getEvents());
       },
     });
   };
@@ -154,14 +137,23 @@ const EventManagement = () => {
     setNewEvent({ ...newEvent, images: imgURLs });
   };
 
+  // format date function
+  const formatDate = (date) => {
+    return date.split("T")[0];
+  };
+
+  useEffect(() => {
+    dispatch(getEvents());
+  }, [dispatch]);
+
   return (
     <div className="p-6">
       <h2 className="text-3xl font-bold text-[#001F3F] mb-6">
         Event Management
       </h2>
 
-      {/* Search & Add Button */}
-      <div className="mb-4 flex md:justify-between flex-col md:flex-row space-y-2 md:space-y-0">
+      {/* Filters & Controls */}
+      <div className="mb-4 flex flex-col md:flex-row justify-between gap-4">
         <input
           type="text"
           placeholder="Search events..."
@@ -169,12 +161,31 @@ const EventManagement = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button
-          className="bg-gradient-to-r from-[#FF4500] to-[#FF6347] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition"
-          onClick={() => setIsAdding(true)}
-        >
-          <i className="ri-add-line mr-1"></i> Add Event
-        </button>
+        <div className="flex gap-2 flex-wrap">
+          <select
+            className="p-2 border rounded-md"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+          <select
+            className="p-2 border rounded-md"
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+          >
+            <option value={5}>5 / page</option>
+            <option value={10}>10 / page</option>
+            <option value={20}>20 / page</option>
+          </select>
+          <button
+            className="bg-gradient-to-r from-[#FF4500] to-[#FF6347] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transition"
+            onClick={() => setIsAdding(true)}
+          >
+            <i className="ri-add-line mr-1"></i> Add Event
+          </button>
+        </div>
       </div>
 
       {/* Event List Table View */}
@@ -191,15 +202,15 @@ const EventManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredEvents.map((event) => (
+            {paginatedEvents.map((event) => (
               <tr
-                key={event.id}
+                key={event._id}
                 className="border-b border-gray-200 hover:bg-gray-50 transition"
               >
                 <td className="px-4 py-3">
-                  {event.images && event.images.length > 0 ? (
+                  {event.gallery && event.gallery.length > 0 ? (
                     <img
-                      src={event.images[0]}
+                      src={event.gallery[0].url}
                       alt="event preview"
                       className="w-16 h-16 object-cover rounded-md"
                     />
@@ -208,10 +219,10 @@ const EventManagement = () => {
                   )}
                 </td>
                 <td className="px-4 py-3 font-semibold text-[#001F3F]">
-                  {event.title}
+                  {event.eventTitle}
                 </td>
                 <td className="px-4 py-3">
-                  {event.startDate} → {event.endDate}
+                  {formatDate(event.startDate)} → {formatDate(event.endDate)}
                 </td>
                 <td className="px-4 py-3">
                   {event.startTime} - {event.endTime}
@@ -232,6 +243,30 @@ const EventManagement = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+
+        <span className="text-sm text-gray-600">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
 
       {/* Modal to Add Event */}
