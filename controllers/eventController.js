@@ -32,6 +32,12 @@ const createEventWithGallery = async (req, res) => {
       return res.status(400).json({ error: "All fields are required." });
     }
 
+    if (startDate > endDate) {
+      return res
+        .status(400)
+        .json({ error: "Start date cannot be after end date." });
+    }
+
     // 1. Save the event
     const newEvent = new Event({
       eventTitle,
@@ -72,8 +78,6 @@ const createEventWithGallery = async (req, res) => {
       }
     }
 
-  
-
     // 3. Save gallery (if images exist)
     let savedGallery = null;
     if (images.length > 0) {
@@ -95,6 +99,104 @@ const createEventWithGallery = async (req, res) => {
     res.status(500).json({ error: "Failed to create event and gallery." });
   }
 };
+
+const updateEventWithGallery = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      eventTitle,
+      description,
+      startDate,
+      endDate,
+      startTime,
+      endTime,
+      location,
+      highlights,
+      deletedImageIds = [], // optional public_ids to delete from Cloudinary
+      captions = [],
+    } = req.body;
+
+    // 1. Update Event
+    const updatedEvent = await Event.findByIdAndUpdate(
+      id,
+      {
+        eventTitle,
+        description,
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        location,
+        highlights,
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedEvent) {
+      return res.status(404).json({ error: "Event not found." });
+    }
+
+    // 2. Get existing gallery (if any)
+    let gallery = await Gallery.findOne({ event: id });
+
+    // 3. Delete images from Cloudinary if requested
+    if (deletedImageIds.length > 0 && gallery) {
+      // Remove from Cloudinary
+      await Promise.all(
+        deletedImageIds.map((public_id) => cloudinary.uploader.destroy(public_id))
+      );
+
+      // Filter out deleted images from gallery
+      gallery.images = gallery.images.filter(
+        (img) => !deletedImageIds.includes(img.public_id)
+      );
+    }
+
+    // 4. Upload new images if provided
+    if (req.files && req.files.length > 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        const file = req.files[i];
+        const result = await uploadImage(file.path, "uploads/gallery");
+
+        gallery.images.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+          format: result.format,
+          width: result.width,
+          height: result.height,
+          uploadedAt: new Date(result.created_at),
+          caption: captions[i] || "",
+        });
+
+        // Remove temp file
+        fs.unlink(file.path, (err) => {
+          if (err) console.error(`Temp delete failed: ${file.path}`, err);
+        });
+      }
+    }
+
+    // 5. Save or create the gallery
+    if (gallery) {
+      await gallery.save();
+    } else if (req.files && req.files.length > 0) {
+      gallery = await new Gallery({
+        event: id,
+        images: gallery.images,
+      }).save();
+    }
+
+    // 6. Send updated response
+    res.status(200).json({
+      message: "Event and gallery updated successfully 🎯",
+      event: updatedEvent,
+      gallery: gallery?.images || [],
+    });
+  } catch (error) {
+    console.error("Error updating event with gallery:", error);
+    res.status(500).json({ error: "Failed to update event and gallery." });
+  }
+};
+
 
 // controller for updating an event
 const updateEvent = async (req, res) => {
@@ -274,6 +376,7 @@ const deleteAllEventsWithGalleries = async (req, res) => {
 
 module.exports = {
   createEventWithGallery,
+  updateEventWithGallery,
   updateEvent,
   getAllEventsWithGallery,
   getEventByIdWithGallery,
