@@ -20,6 +20,7 @@ export const handleApiCall = async ({
     }
 
     const response = await apiFunc();
+    console.log('API Response:', response);
     const data = response?.data || response;
 
     if (showToast) {

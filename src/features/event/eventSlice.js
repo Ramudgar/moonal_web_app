@@ -34,6 +34,27 @@ export const getEvents = createAsyncThunk(
   }
 );
 
+// update event with gallery
+export const updateEventWithGallery = createAsyncThunk(
+  "event/updateEventWithGallery",
+  async ({ id, formData }, { rejectWithValue }) => {
+    try {
+      const res = await api.put(
+        API_ENDPOINTS.EVENTS.UPDATE_WITH_GALLERY(id),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return res.data; // { message, data }
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
 const initialState = {
   loading: false,
   error: null,
@@ -85,6 +106,21 @@ const eventSlice = createSlice({
       .addCase(getEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch events.";
+      })
+      // 👉 Update Event with Gallery
+      .addCase(updateEventWithGallery.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateEventWithGallery.fulfilled, (state, action) => {
+        state.loading = false;
+        state.successMessage =
+          action.payload.message || "Event updated successfully.";
+        // ❌ Don't push manually — getEvents() should be triggered on success in the component
+      })
+      .addCase(updateEventWithGallery.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to update event.";
       });
   },
 });

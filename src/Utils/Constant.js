@@ -32,6 +32,7 @@ export const API_ENDPOINTS = {
   },
   EVENTS: {
     CREATE: `${API_BASE}/events/create`,
+    UPDATE_WITH_GALLERY: (id) => `${API_BASE}/events/update-with-gallery/${id}`,
     UPDATE: (id) => `${API_BASE}/events/update/${id}`,
     GET_ALL_WITH_GALLERY: `${API_BASE}/events/all-with-gallery`,
     GET_ONE: (id) => `${API_BASE}/events/${id}`,
