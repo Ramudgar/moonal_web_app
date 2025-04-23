@@ -55,6 +55,20 @@ export const updateEventWithGallery = createAsyncThunk(
   }
 );
 
+// Delete Event
+export const deleteEvent = createAsyncThunk(
+  "event/deleteEvent",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await api.delete(API_ENDPOINTS.EVENTS.DELETE_ONE(id));
+      console.log("Delete Event Response:", res);
+      return res.data; // { message }
+    } catch (err) {
+      return rejectWithValue(err.response?.data || err.message);
+    }
+  }
+);
+
 const initialState = {
   loading: false,
   error: null,
@@ -121,7 +135,22 @@ const eventSlice = createSlice({
       .addCase(updateEventWithGallery.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to update event.";
-      });
+      })
+      .addCase(deleteEvent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      }
+      )
+      .addCase(deleteEvent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.successMessage =
+          action.payload.message || "Event deleted successfully.";
+        // ❌ Don't push manually — getEvents() should be triggered on success in the component
+      })
+      .addCase(deleteEvent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to delete event.";
+      }); 
   },
 });
 

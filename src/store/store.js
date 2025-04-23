@@ -5,6 +5,7 @@ import delearshipReducer from "../features/delearship/delearshipSlice";
 import authReducer from "../features/auth/authSlice";
 import productReducer from "../features/product/productSlice";
 import eventReducer from "../features/event/eventSlice";
+import galleryReducer from "../features/Gallery/gallerySlice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     delearship: delearshipReducer,
     products: productReducer,
     event: eventReducer,
+    gallery: galleryReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -22,7 +24,7 @@ export const store = configureStore({
     import.meta.env.MODE !== "production"
       ? {
           name: "Moonal Redux DevTools",
-          trace: true,
+          trace: true, //false in production
           traceLimit: 25,
         }
       : false,

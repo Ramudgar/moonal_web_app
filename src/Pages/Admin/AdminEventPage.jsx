@@ -5,6 +5,7 @@ import { handleApiCall } from "../../Utils/handleApiCall";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createEvent,
+  deleteEvent,
   getEvents,
   updateEventWithGallery,
 } from "../../features/event/eventSlice";
@@ -31,7 +32,11 @@ const EventManagement = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [showFormModal, setShowFormModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [viewModal, setViewModal] = useState(false);
 
+  // state for confirm delete modal
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  //variable for pagination
   const totalPages = Math.ceil(events.length / itemsPerPage);
 
   const filteredEvents = events
@@ -55,6 +60,7 @@ const EventManagement = () => {
 
   console.log("eidtMode", editMode);
 
+  // function to handle form submission for adding or updating an event
   const handleAddEvent = async (e) => {
     e.preventDefault();
 
@@ -139,8 +145,6 @@ const EventManagement = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const [newEvent, setNewEvent] = useState(INITIAL_EVENT);
-  // console.log("newEvent", newEvent);
-  // console.log("new event id", newEvent._id);
 
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.filter(
@@ -178,6 +182,24 @@ const EventManagement = () => {
   const formatDate = (date) => {
     return date.split("T")[0];
   };
+
+  // function to handle delete event
+  const handleDeleteEvent = async (id) => {
+    if (confirmDelete) {
+      handleApiCall({
+        apiFunc: () => dispatch(deleteEvent(id)).unwrap(),
+        loadingMsg: "Deleting event...",
+        successMsg: "Event deleted successfully!",
+        errorMsg: "Failed to delete event.",
+        onSuccess: () => {
+          setConfirmDelete(false);
+          dispatch(getEvents());
+        },
+      });
+    }
+  };
+
+  // react useEffect to fetch events on component mount
 
   useEffect(() => {
     dispatch(getEvents());
@@ -278,7 +300,10 @@ const EventManagement = () => {
                   <td className="px-4 py-3 space-x-2">
                     <button
                       className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                      onClick={() => setSelectedEvent(event)}
+                      onClick={() => {
+                        setViewModal(true);
+                        setSelectedEvent(event);
+                      }}
                     >
                       <i className="ri-eye-line"></i> View
                     </button>
@@ -304,7 +329,13 @@ const EventManagement = () => {
                     >
                       <i className="ri-pencil-line"></i> Edit
                     </button>
-                    <button className="text-red-600 hover:text-red-800 text-sm font-medium">
+                    <button
+                      onClick={() => {
+                        setSelectedEvent(event);
+                        setConfirmDelete(true);
+                      }}
+                      className="text-red-600 hover:text-red-800 text-sm font-medium"
+                    >
                       <i className="ri-delete-bin-line"></i> Delete
                     </button>
                   </td>
@@ -542,7 +573,7 @@ const EventManagement = () => {
       </AnimatePresence>
       {/* Slide-in Event View Modal */}
       <AnimatePresence>
-        {selectedEvent && (
+        {viewModal && (
           <motion.div
             className="fixed inset-0 z-50 flex justify-end bg-black/30 backdrop-blur-sm"
             initial={{ opacity: 0 }}
@@ -561,7 +592,10 @@ const EventManagement = () => {
                   {selectedEvent.eventTitle}
                 </h2>
                 <button
-                  onClick={() => setSelectedEvent(null)}
+                  onClick={() => {
+                    setViewModal(false);
+                    setSelectedEvent(null);
+                  }}
                   className="text-gray-500 hover:text-red-600 text-xl"
                 >
                   ✕
@@ -657,6 +691,43 @@ const EventManagement = () => {
                     <p className="text-gray-400">No images available.</p>
                   )}
                 </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Confirm Delete Modal */}
+      <AnimatePresence>
+        {confirmDelete && (
+          <motion.div
+            className="fixed inset-0 backdrop-blur-sm bg-black/30 flex justify-center items-center p-6 z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white p-6 rounded-xl shadow-2xl max-w-md w-full"
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+              exit={{ y: 50 }}
+            >
+              <h3 className="text-lg font-bold mb-4 text-center">
+                Are you sure you want to delete this event?
+              </h3>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setConfirmDelete(false)}
+                  className="bg-gray-400 text-white px-4 py-2 rounded-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDeleteEvent(selectedEvent._id)}
+                  className="bg-red-600 text-white px-4 py-2 rounded-md"
+                >
+                  Delete
+                </button>
               </div>
             </motion.div>
           </motion.div>

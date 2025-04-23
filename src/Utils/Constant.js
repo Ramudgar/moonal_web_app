@@ -39,4 +39,11 @@ export const API_ENDPOINTS = {
     DELETE_ONE: (id) => `${API_BASE}/events/${id}`,
     DELETE_ALL: `${API_BASE}/events`,
   },
+  GALLERY: {
+    UPDATE: (eventId) => `${API_BASE}/gallery/${eventId}`, // PUT (images[])
+    DELETE_IMAGE: (publicId) => `${API_BASE}/gallery/delete-image/${publicId}`,
+    DELETE_BY_EVENT_ID: (eventId) => `${API_BASE}/gallery/delete/${eventId}`,
+    GET_ALL_WITH_EVENT: `${API_BASE}/gallery/all-with-event`,
+    GET_BY_EVENT_ID: (eventId) => `${API_BASE}/gallery/${eventId}`,
+  },
 };

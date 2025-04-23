@@ -1,32 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "remixicon/fonts/remixicon.css";
 import Select from "react-select/base";
 import { useDropzone } from "react-dropzone";
+import { useDispatch, useSelector } from "react-redux";
+import { getGallery } from "../../features/Gallery/gallerySlice";
 
 const GalleryManagement = () => {
-  const [gallery, setGallery] = useState([
-    {
-      id: 1,
-      title: "Product Launch Event",
-      date: "2024-03-10",
-      images: [
-        "https://www.shutterstock.com/image-photo/shipyard-started-serve-public-space-600nw-2486297109.jpg",
-        "https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg?cs=srgb&dl=pexels-bertellifotografia-2608517.jpg&fm=jpg",
-        "https://images.squarespace-cdn.com/content/v1/5b0325e150a54f13069fb6de/1586897347739-2UZ9CMQR68AKATJQB3U3/IMG_0071.jpeg",
-        "https://images.squarespace-cdn.com/content/v1/5b0325e150a54f13069fb6de/1586897347739-2UZ9CMQR68AKATJQB3U3/IMG_0071.jpeg",
-      ],
-    },
-    {
-      id: 2,
-      title: "Dealer Conference",
-      date: "2024-02-15",
-      images: [
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_Kly_cp1c5XZoefiam3XCndJxUrsp3FVliw&s",
-        "https://media.istockphoto.com/id/518198142/photo/visitors-in-art-gallery-looking-at-artwork-and-talking.jpg?s=612x612&w=0&k=20&c=6J9m4sr9nolyfNrQ1_nfXtGlctnhOM65MbwNWrmuO_4=",
-      ],
-    },
-  ]);
+  const dispatch = useDispatch();
+  const {
+    gallery,
+    // loading
+  } = useSelector((state) => state.gallery);
+  // console.log(gallery);
+  // State variables
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGallery, setSelectedGallery] = useState(null);
@@ -36,36 +23,16 @@ const GalleryManagement = () => {
   const [uploadedImages, setUploadedImages] = useState([]); // Uploaded image list
   // event options for dropdown and get it from the event list
   const eventOptions = gallery.map((item) => ({
-    value: item.id,
-    label: item.title,
+    value: item.event._id,
+    label: item.event.eventTitle,
   }));
 
   // Filter galleries based on search
   const filteredGallery = gallery.filter((item) =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    item.event.eventTitle.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSubmitGallery = (e) => {
-    e.preventDefault();
-
-    if (!selectedEvent || !eventDate || uploadedImages.length === 0) {
-      alert("All fields are required.");
-      return;
-    }
-
-    const newGallery = {
-      id: Date.now(),
-      title: selectedEvent.label,
-      date: eventDate,
-      images: uploadedImages,
-    };
-
-    setGallery((prev) => [...prev, newGallery]);
-    setIsAdding(false);
-    setSelectedEvent(null);
-    setEventDate("");
-    setUploadedImages([]);
-  };
+  console.log("filteredGallery", filteredGallery);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
@@ -74,6 +41,10 @@ const GalleryManagement = () => {
       setUploadedImages(acceptedFiles.map((file) => URL.createObjectURL(file)));
     },
   });
+
+  useEffect(() => {
+    dispatch(getGallery());
+  }, [dispatch]);
 
   return (
     <div className="p-6">
@@ -102,19 +73,19 @@ const GalleryManagement = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredGallery.map((item) => (
           <motion.div
-            key={item.id}
+            key={item.event._id}
             whileHover={{ scale: 1.05 }}
             className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200 cursor-pointer"
             onClick={() => setSelectedGallery(item)}
           >
             <img
-              src={item.images[0]}
-              alt={item.title}
+              src={item.images[0].url}
+              alt={item.event.eventTitle}
               className="w-full h-40 object-cover"
             />
             <div className="p-4">
-              <h3 className="text-lg font-semibold">{item.title}</h3>
-              <p className="text-sm text-gray-500">{item.date}</p>
+              <h3 className="text-lg font-semibold">{item.event.eventTitle}</h3>
+              <p className="text-sm text-gray-500">{item.event.startDate}</p>
             </div>
           </motion.div>
         ))}
@@ -136,13 +107,13 @@ const GalleryManagement = () => {
               exit={{ y: 50 }}
             >
               <h3 className="text-2xl font-bold mb-6 text-center">
-                {selectedGallery.title}
+                {selectedGallery.event.eventTitle}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {selectedGallery.images.map((img, index) => (
                   <div key={index} className="relative">
                     <img
-                      src={img}
+                      src={img.url}
                       alt="Gallery Image"
                       className="w-full h-60 object-cover rounded-md"
                     />
@@ -180,7 +151,9 @@ const GalleryManagement = () => {
               </h3>
 
               {/* Form Body */}
-              <form onSubmit={handleSubmitGallery}>
+              <form
+              // onSubmit={handleSubmitGallery}
+              >
                 {/* Event Dropdown */}
                 <Select
                   options={eventOptions} // From gallery.map()
